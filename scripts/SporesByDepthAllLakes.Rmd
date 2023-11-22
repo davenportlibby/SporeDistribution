@@ -1,0 +1,1159 @@
+---
+title: "SporesByDepthAllLakes"
+author: "Elizabeth Davenport"
+date: '2023-11-22'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Initial stuff, including loading packages and importing data
+
+##loading packages
+```{r,message=F,warning=F}
+library(tidyverse)
+library(here)
+library(ggpubr)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+library(scales)
+library(reshape2)
+library(RColorBrewer)
+```
+
+## loading files
+
+```{r,message=F,warning=F}
+# Tell R where files are stored
+here::i_am("scripts/SporesByDepthAllLakes.Rmd")
+
+# Load Files
+a <- readr::read_csv(here("data/SporeConcentrationsByDepthLocations.csv"))
+
+```
+
+## Making a 30-panel figure
+```{r,message=F,warning=F}
+
+col2 <-c("0"= "#AEC5DE", "1"= "#C6DBEF", "2"="#9ECAE1", "3"="#6BAED6","4"= "#4292C6","5"= "#2171B5","6"= "#084594", "7"="#08306B")
+col3 <- c( "0"="#F7FDFA", "1"= "#EFEFEF","2"=  "#DFDFDF","3"=  "#CFCFCF","4"=  "#BFBFBF","5"=  "#AFAFAF",
+           "6"= "#9F9F9F","7"=  "#8F8F8F","8"=  "#7F7F7F","9"=  "#6F6F6F","10"=  "#5F5F5F",
+           "11"= "#4F4F4F","12"=  "#3F3F3F","13"=  "#2F2F2F","14"=  "#1F1F1F","15"=  "#0F0F0F","16"=  "#000000")
+
+######### Cedar
+cb = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="Cedar",
+         Location == "Basin")
+
+conccb <- cb$ConcentrationLog10Plus1
+pcb <- cb$Parasite
+dcb <- cb$Depth
+dcb <- as.factor(dcb)
+yycb <- strptime(cb$Date, format = "%m/%d/%y")
+lcb <- as.POSIXct(yycb,format="%m/%d/%y",tz=Sys.timezone())
+
+
+cedar.brood <- ggplot(cb) +
+  geom_point(aes(x=lcb,y=conccb, group=dcb,color=dcb), size=.5) +
+  geom_smooth(aes(x=lcb,y=conccb, group=dcb, color=dcb),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-17")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Cedar:"), bolditalic(" B. paedophthorum")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(legend.title = element_text(face = "bold",size = 8),
+        legend.text=element_text(size=6),
+        legend.position = "bottom") + guides(color=guide_legend(nrow=4,byrow=FALSE))+ 
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######## Cedar MicG
+co = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="Cedar",
+         Location == "Basin")
+
+concco <- co$ConcentrationLog10Plus1
+pco <- co$Parasite
+dco <- co$Depth
+dco <- as.factor(dco)
+yyco <- strptime(co$Date, format = "%m/%d/%y")
+lco <- as.POSIXct(yyco,format="%m/%d/%y",tz=Sys.timezone())
+
+
+cedar.micg <- ggplot(co) +
+  geom_point(aes(x=lco,y=concco, group=dco,color=dco), size=.5) +
+  geom_smooth(aes(x=lco,y=concco, group=dco, color=dco),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-17")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Cedar:"), bolditalic(" O. pajunii")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######### Cedar Metsch
+cm = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="Cedar",
+         Location == "Basin")
+
+conccm <- cm$ConcentrationLog10Plus1
+pcm <- cm$Parasite
+dcm <- cm$Depth
+dcm <- as.factor(dcm)
+yycm <- strptime(cm$Date, format = "%m/%d/%y")
+lcm <- as.POSIXct(yycm,format="%m/%d/%y",tz=Sys.timezone())
+
+
+cedar.metsch <- ggplot(cm) +
+  geom_point(aes(x=lcm,y=conccm, group=dcm,color=dcm), size=.5) +
+  geom_smooth(aes(x=lcm,y=conccm, group=dcm, color=dcm),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-17")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Cedar:"), bolditalic(" M. bicuspidata")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(legend.title = element_text(face = "bold",size = 8),
+        legend.text=element_text(size=6,face="bold"),
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+
+####### Cedar Past
+
+cp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Cedar",
+         Location == "Basin")
+
+conccp <- cp$ConcentrationLog10Plus1
+pcp <- cp$Parasite
+dcp <- cp$Depth
+dcp <- as.factor(dcp)
+yycp <- strptime(cp$Date, format = "%m/%d/%y")
+lcp <- as.POSIXct(yycp,format="%m/%d/%y",tz=Sys.timezone())
+
+
+cedar.past <- ggplot(cp) +
+  geom_point(aes(x=lcp,y=conccp, group=dcp,color=dcp), size=.5) +
+  geom_smooth(aes(x=lcp,y=conccp, group=dcp, color=dcp),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-17")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Cedar:"), bolditalic(" P. ramosa")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######## Cedar Spiro
+
+cs = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="Cedar",
+         Location == "Basin")
+
+conccs <- cs$ConcentrationLog10Plus1
+pcs <- cs$Parasite
+dcs <- cs$Depth
+dcs <- as.factor(dcs)
+yycs <- strptime(cs$Date,format = "%m/%d/%y")
+lcs <- as.POSIXct(yycs,format="%m/%d/%y",tz=Sys.timezone())
+
+
+cedar.spiro <- ggplot(cs) +
+  geom_point(aes(x=lcs,y=conccs, group=dcs,color=dcs), size=.5) +
+  geom_smooth(aes(x=lcs,y=conccs, group=dcs, color=dcs),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-17")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Cedar:"), bolditalic(" S. cienkowskii")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######### Mill
+
+mb = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="Mill",
+         Location == "Basin")
+
+concmb <- mb$ConcentrationLog10Plus1
+pmb <- mb$Parasite
+dmb <- mb$Depth
+dmb <- as.factor(dmb)
+yymb <- strptime(mb$Date, format = "%m/%d/%y")
+lmb <- as.POSIXct(yymb,format="%m/%d/%y",tz=Sys.timezone())
+
+
+mill.brood <- ggplot(mb) +
+  geom_point(aes(x=lmb,y=concmb, group=dmb,color=dmb), size=.5) +
+  geom_smooth(aes(x=lmb,y=concmb, group=dmb, color=dmb),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-17")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Mill:"), bolditalic(" B. paedophthorum")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######## Mill MicG
+mo = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="Mill",
+         Location == "Basin")
+
+concmo <- mo$ConcentrationLog10Plus1
+pmo <- mo$Parasite
+dmo <- mo$Depth
+dmo <- as.factor(dmo)
+yymo <- strptime(mo$Date, format = "%m/%d/%y")
+lmo <- as.POSIXct(yymo,format="%m/%d/%y",tz=Sys.timezone())
+
+
+mill.micg <- ggplot(mo) +
+  geom_point(aes(x=lmo,y=concmo, group=dmo,color=dmo), size=.5) +
+  geom_smooth(aes(x=lmo,y=concmo, group=dmo, color=dmo),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-17")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Mill:"), bolditalic(" O. pajunii")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######### Mill Metsch
+mm = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="Mill",
+         Location == "Basin")
+
+concmm <- mm$ConcentrationLog10Plus1
+pmm <- mm$Parasite
+dmm <- mm$Depth
+dmm <- as.factor(dmm)
+yymm <- strptime(mm$Date, format = "%m/%d/%y")
+lmm <- as.POSIXct(yymm,format="%m/%d/%y",tz=Sys.timezone())
+
+mill.metsch <- ggplot(mm) +
+  geom_point(aes(x=lmm,y=concmm, group=dmm,color=dmm), size=.5) +
+  geom_smooth(aes(x=lmm,y=concmm, group=dmm, color=dmm),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-17")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Mill:"), bolditalic(" M. bicuspidata")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+####### Mill Past
+
+mp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Mill",
+         Location == "Basin")
+
+concmp <- mp$ConcentrationLog10Plus1
+pmp <- mp$Parasite
+dmp <- mp$Depth
+dmp <- as.factor(dmp)
+yymp <- strptime(mp$Date, format = "%m/%d/%y")
+lmp <- as.POSIXct(yymp,format="%m/%d/%y",tz=Sys.timezone())
+
+
+mill.past <- ggplot(mp) +
+  geom_point(aes(x=lmp,y=concmp, group=dmp,color=dmp), size=.5) +
+  geom_smooth(aes(x=lmp,y=concmp, group=dmp, color=dmp),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-17")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Mill:"), bolditalic(" P. ramosa")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######## Mill Spiro
+
+ms = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="Mill",
+         Location == "Basin")
+
+concms <- ms$ConcentrationLog10Plus1
+pms <- ms$Parasite
+dms <- ms$Depth
+dms <- as.factor(dms)
+yyms <- strptime(ms$Date, format = "%m/%d/%y")
+lms <- as.POSIXct(yyms,format="%m/%d/%y",tz=Sys.timezone())
+
+
+mill.spiro <- ggplot(ms) +
+  geom_point(aes(x=lms,y=concms, group=dms,color=dms), size=.5) +
+  geom_smooth(aes(x=lms,y=concms, group=dms, color=dms),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-17")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Mill:"), bolditalic(" S. cienkowskii")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######### Walsh
+
+wb = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="Walsh",
+         Location == "Basin")
+
+concwb <- wb$ConcentrationLog10Plus1
+pwb <- wb$Parasite
+dwb <- wb$Depth
+dwb <- as.factor(dwb)
+yywb <- strptime(wb$Date, format = "%m/%d/%y")
+lwb <- as.POSIXct(yywb,format="%m/%d/%y",tz=Sys.timezone())
+
+
+walsh.brood <- ggplot(wb) +
+  geom_point(aes(x=lwb,y=concwb, group=dwb,color=dwb), size=.5) +
+  geom_smooth(aes(x=lwb,y=concwb, group=dwb, color=dwb),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Walsh:"), bolditalic(" B. paedophthorum")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######## Walsh MicG
+wo = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="Walsh",
+         Location == "Basin")
+
+concwo <- wo$ConcentrationLog10Plus1
+pwo <- wo$Parasite
+dwo <- wo$Depth
+dwo <- as.factor(dwo)
+yywo <- strptime(wo$Date, format = "%m/%d/%y")
+lwo <- as.POSIXct(yywo,format="%m/%d/%y",tz=Sys.timezone())
+
+
+walsh.micg <- ggplot(wo) +
+  geom_point(aes(x=lwo,y=concwo, group=dwo,color=dwo), size=.5) +
+  geom_smooth(aes(x=lwo,y=concwo, group=dwo, color=dwo),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Walsh:"), bolditalic(" O. pajunii")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######### Walsh Metsch
+wm = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="Walsh",
+         Location == "Basin")
+
+concwm <- wm$ConcentrationLog10Plus1
+pwm <- wm$Parasite
+dwm <- wm$Depth
+dwm <- as.factor(dwm)
+yywm <- strptime(wm$Date, format = "%m/%d/%y")
+lwm <- as.POSIXct(yywm,format="%m/%d/%y",tz=Sys.timezone())
+
+walsh.metsch <- ggplot(wm) +
+  geom_point(aes(x=lwm,y=concwm, group=dwm,color=dwm), size=.5) +
+  geom_smooth(aes(x=lwm,y=concwm, group=dwm, color=dwm),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Walsh:"), bolditalic(" M. bicuspidata")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+####### Walsh Past
+
+wp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Walsh",
+         Location == "Basin")
+
+concwp <- wp$ConcentrationLog10Plus1
+pwp <- wp$Parasite
+dwp <- wp$Depth
+dwp <- as.factor(dwp)
+yywp <- strptime(wp$Date, format = "%m/%d/%y")
+lwp <- as.POSIXct(yywp,format="%m/%d/%y",tz=Sys.timezone())
+
+
+walsh.past <- ggplot(wp) +
+  geom_point(aes(x=lwp,y=concwp, group=dwp,color=dwp), size=.5) +
+  geom_smooth(aes(x=lwp,y=concwp, group=dwp, color=dwp),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Walsh:"), bolditalic(" P. ramosa")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######## Walsh Spiro
+
+ws = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="Walsh",
+         Location == "Basin")
+
+concws <- ws$ConcentrationLog10Plus1
+pws <- ws$Parasite
+dws <- ws$Depth
+dws <- as.factor(dws)
+yyws <- strptime(ws$Date, format = "%m/%d/%y")
+lws <- as.POSIXct(yyws,format="%m/%d/%y",tz=Sys.timezone())
+
+
+walsh.spiro <- ggplot(ws) +
+  geom_point(aes(x=lws,y=concws, group=dws,color=dws), size=.5) +
+  geom_smooth(aes(x=lws,y=concws, group=dws, color=dws),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-22")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Walsh:"), bolditalic(" S. cienkowskii")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######### Crooked W
+
+cwb = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="CrookedW",
+         Location == "Basin")
+
+conccwb <- cwb$ConcentrationLog10Plus1
+pcwb <- cwb$Parasite
+dcwb <- cwb$Depth
+dcwb <- as.factor(dcwb)
+yycwb <- strptime(cwb$Date, format = "%m/%d/%y")
+lcwb <- as.POSIXct(yycwb,format="%m/%d/%y",tz=Sys.timezone())
+
+
+crookedw.brood <- ggplot(cwb) +
+  geom_point(aes(x=lcwb,y=conccwb, group=dcwb,color=dcwb), size=.5) +
+  geom_smooth(aes(x=lcwb,y=conccwb, group=dcwb, color=dcwb),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-03")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-21")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Crooked W:"), bolditalic(" B. paedophthorum")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######## Crooked W MicG
+cwo = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="CrookedW",
+         Location == "Basin")
+
+conccwo <- cwo$ConcentrationLog10Plus1
+pcwo <- cwo$Parasite
+dcwo <- cwo$Depth
+dcwo <- as.factor(dcwo)
+yycwo <- strptime(cwo$Date, format = "%m/%d/%y")
+lcwo <- as.POSIXct(yycwo,format="%m/%d/%y",tz=Sys.timezone())
+
+
+crookedw.micg <- ggplot(cwo) +
+  geom_point(aes(x=lcwo,y=conccwo, group=dcwo,color=dcwo), size=.5) +
+  geom_smooth(aes(x=lcwo,y=conccwo, group=dcwo, color=dcwo),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-03")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-21")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Crooked W:"), bolditalic(" O. pajunii")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######### Crooked W Metsch
+cwm = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="CrookedW",
+         Location == "Basin")
+
+conccwm <- cwm$ConcentrationLog10Plus1
+pcwm <- cwm$Parasite
+dcwm <- cwm$Depth
+dcwm <- as.factor(dcwm)
+yycwm <- strptime(cwm$Date, format = "%m/%d/%y")
+lcwm <- as.POSIXct(yycwm,format="%m/%d/%y",tz=Sys.timezone())
+
+crookedw.metsch <- ggplot(cwm) +
+  geom_point(aes(x=lcwm,y=conccwm, group=dcwm,color=dcwm), size=.5) +
+  geom_smooth(aes(x=lcwm,y=conccwm, group=dcwm, color=dcwm),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-03")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-21")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Crooked W:"), bolditalic(" M. bicuspidata")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+####### Crooked W Past
+
+cwp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="CrookedW",
+         Location == "Basin")
+
+conccwp <- cwp$ConcentrationLog10Plus1
+pcwp <- cwp$Parasite
+dcwp <- cwp$Depth
+dcwp <- as.factor(dcwp)
+yycwp <- strptime(cwp$Date, format = "%m/%d/%y")
+lcwp <- as.POSIXct(yycwp,format="%m/%d/%y",tz=Sys.timezone())
+
+
+crookedw.past <- ggplot(cwp) +
+  geom_point(aes(x=lcwp,y=conccwp, group=dcwp,color=dcwp), size=.5) +
+  geom_smooth(aes(x=lcwp,y=conccwp, group=dcwp, color=dcwp),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-03")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-21")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Crooked W:"), bolditalic(" P. ramosa")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######## Crooked W Spiro
+
+cws = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="CrookedW",
+         Location == "Basin")
+
+conccws <- cws$ConcentrationLog10Plus1
+pcws <- cws$Parasite
+dcws <- cws$Depth
+dcws <- as.factor(dcws)
+yycws <- strptime(cws$Date, format = "%m/%d/%y")
+lcws <- as.POSIXct(yycws,format="%m/%d/%y",tz=Sys.timezone())
+
+
+crookedw.spiro <- ggplot(cws) +
+  geom_point(aes(x=lcws,y=conccws, group=dcws,color=dcws), size=.5) +
+  geom_smooth(aes(x=lcws,y=conccws, group=dcws, color=dcws),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-03")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-09-21")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Crooked W:"), bolditalic(" S. cienkowskii")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######### LilAp
+
+lb = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="LilAp",
+         Location == "Basin")
+
+conclb <- lb$ConcentrationLog10Plus1
+plb <- lb$Parasite
+dlb <- lb$Depth
+dlb <- as.factor(dlb)
+yylb <- strptime(lb$Date, format = "%m/%d/%y")
+llb <- as.POSIXct(yylb,format="%m/%d/%y",tz=Sys.timezone())
+
+
+lilap.brood <- ggplot(lb) +
+  geom_point(aes(x=llb,y=conclb, group=dlb,color=dlb), size=.5) +
+  geom_smooth(aes(x=llb,y=conclb, group=dlb, color=dlb),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-27")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Little Appleton:"), bolditalic(" B. paedophthorum")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######## LilAp MicG
+lo = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="LilAp",
+         Location == "Basin")
+
+conclo <- lo$ConcentrationLog10Plus1
+plo <- lo$Parasite
+dlo <- lo$Depth
+dlo <- as.factor(dlo)
+yylo <- strptime(lo$Date, format = "%m/%d/%y")
+llo <- as.POSIXct(yylo,format="%m/%d/%y",tz=Sys.timezone())
+
+
+lilap.micg <- ggplot(lo) +
+  geom_point(aes(x=llo,y=conclo, group=dlo,color=dlo), size=.5) +
+  geom_smooth(aes(x=llo,y=conclo, group=dlo, color=dlo),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-27")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Little Appleton:"), bolditalic(" O. pajunii")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######### LilAp Metsch
+lm = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="LilAp",
+         Location == "Basin")
+
+conclm <- lm$ConcentrationLog10Plus1
+plm <- lm$Parasite
+dlm <- lm$Depth
+dlm <- as.factor(dlm)
+yylm <- strptime(lm$Date, format = "%m/%d/%y")
+llm <- as.POSIXct(yylm,format="%m/%d/%y",tz=Sys.timezone())
+
+lilap.metsch <- ggplot(lm) +
+  geom_point(aes(x=llm,y=conclm, group=dlm,color=dlm), size=.5) +
+  geom_smooth(aes(x=llm,y=conclm, group=dlm, color=dlm),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-27")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Little Appleton:"), bolditalic(" M. bicuspidata")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") + 
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+####### LilAp Past
+
+lp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="LilAp",
+         Location == "Basin")
+
+conclp <- lp$ConcentrationLog10Plus1
+plp <- lp$Parasite
+dlp <- lp$Depth
+dlp <- as.factor(dlp)
+yylp <- strptime(lp$Date, format = "%m/%d/%y")
+llp <- as.POSIXct(yylp,format="%m/%d/%y",tz=Sys.timezone())
+
+
+lilap.past <- ggplot(lp) +
+  geom_point(aes(x=llp,y=conclp, group=dlp,color=dlp), size=.5) +
+  geom_smooth(aes(x=llp,y=conclp, group=dlp, color=dlp),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-27")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Little Appleton:"), bolditalic(" P. ramosa")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######## LilAp Spiro
+
+ls = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="LilAp",
+         Location == "Basin")
+
+concls <- ls$ConcentrationLog10Plus1
+pls <- ls$Parasite
+dls <- ls$Depth
+dls <- as.factor(dls)
+yyls <- strptime(ls$Date, format = "%m/%d/%y")
+lls <- as.POSIXct(yyls,format="%m/%d/%y",tz=Sys.timezone())
+
+
+lilap.spiro <- ggplot(ls) +
+  geom_point(aes(x=lls,y=concls, group=dls,color=dls), size=.5) +
+  geom_smooth(aes(x=lls,y=concls, group=dls, color=dls),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col2)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  geom_vline(xintercept = as.POSIXct(as.Date("2021-10-27")), linetype="dotted", 
+             color = "#D55E00", size=.5)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Little Appleton:"), bolditalic(" S. cienkowskii")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######### Bishop
+
+bb = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="Bishop",
+         Location == "Basin")
+
+concbb <- bb$ConcentrationLog10Plus1
+pbb <- bb$Parasite
+dbb <- bb$Depth
+dbb <- as.factor(dbb)
+yybb <- strptime(bb$Date, format = "%m/%d/%y")
+lbb <- as.POSIXct(yybb,format="%m/%d/%y",tz=Sys.timezone())
+
+
+bishop.brood <- ggplot(bb) +
+  geom_point(aes(x=lbb,y=concbb, group=dbb,color=dbb), size=.5) +
+  geom_smooth(aes(x=lbb,y=concbb, group=dbb, color=dbb),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col3)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Bishop:"), bolditalic(" B. paedophthorum")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(legend.title = element_text(face = "bold",size = 8),
+        legend.text=element_text(size=6),
+        legend.position = "bottom") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######## Bishop MicG
+bo = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="Bishop",
+         Location == "Basin")
+
+concbo <- bo$ConcentrationLog10Plus1
+pbo <- bo$Parasite
+dbo <- bo$Depth
+dbo <- as.factor(dbo)
+yybo <- strptime(bo$Date, format = "%m/%d/%y")
+lbo <- as.POSIXct(yybo,format="%m/%d/%y",tz=Sys.timezone())
+
+
+bishop.micg <- ggplot(bo) +
+  geom_point(aes(x=lbo,y=concbo, group=dbo,color=dbo), size=.5) +
+  geom_smooth(aes(x=lbo,y=concbo, group=dbo, color=dbo),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col3)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Bishop:"), bolditalic(" O. pajunii")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") + 
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+######### Bishop Metsch
+bm = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="Bishop",
+         Location == "Basin")
+
+concbm <- bm$ConcentrationLog10Plus1
+pbm <- bm$Parasite
+dbm <- bm$Depth
+dbm <- as.factor(dbm)
+yybm <- strptime(bm$Date,format = "%m/%d/%y")
+lbm <- as.POSIXct(yybm,format="%m/%d/%y",tz=Sys.timezone())
+
+bishop.metsch <- ggplot(bm) +
+  geom_point(aes(x=lbm,y=concbm, group=dbm,color=dbm), size=.5) +
+  geom_smooth(aes(x=lbm,y=concbm, group=dbm, color=dbm),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col3)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Bishop:"), bolditalic(" M. bicuspidata")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+####### Bishop Past
+
+bp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Bishop",
+         Location == "Basin")
+
+concbp <- bp$ConcentrationLog10Plus1
+pbp <- bp$Parasite
+dbp <- bp$Depth
+dbp <- as.factor(dbp)
+yybp <- strptime(bp$Date, format = "%m/%d/%y")
+lbp <- as.POSIXct(yybp,format="%m/%d/%y",tz=Sys.timezone())
+
+
+bishop.past <- ggplot(bp) +
+  geom_point(aes(x=lbp,y=concbp, group=dbp,color=dbp), size=.5) +
+  geom_smooth(aes(x=lbp,y=concbp, group=dbp, color=dbp),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col3)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Bishop:"), bolditalic(" P. ramosa")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+
+######## Bishop Spiro
+
+bs = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="Bishop",
+         Location == "Basin")
+
+concbs <- bs$ConcentrationLog10Plus1
+pbs <- bs$Parasite
+dbs <- bs$Depth
+dbs <- as.factor(dbs)
+yybs <- strptime(bs$Date, format = "%m/%d/%y")
+lbs <- as.POSIXct(yybs,format="%m/%d/%y",tz=Sys.timezone())
+
+
+bishop.spiro <- ggplot(bs) +
+  geom_point(aes(x=lbs,y=concbs, group=dbs,color=dbs), size=.5) +
+  geom_smooth(aes(x=lbs,y=concbs, group=dbs, color=dbs),method = "loess", size = .5, span=.5, se=FALSE)+
+  scale_colour_manual(values = col3)+
+  scale_y_continuous(limits=c(0,6.5), breaks = seq(0,6.5,1))+
+  scale_x_datetime(limits = c(as.POSIXct(as.Date("2021-06-07")), as.POSIXct(as.Date("2021-11-13"))))+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle(expression(paste(bold("Bishop:"), bolditalic(" S. cienkowskii")))) +
+  theme(plot.title = element_text(face = "bold",size = 8)) +
+  theme(axis.text=element_text(size=6, face = "bold"), 
+        axis.title=element_text(size=8,face="bold")) +
+  theme(
+        legend.position = "none") +  
+  labs(colour = "Depth (m)", x = (""), y = (""))
+
+
+#### ALL
+blank <- ggplot()+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
+legcombo7 <- get_legend(cedar.brood)
+cedar.brood <- cedar.brood + theme(legend.position = "none")
+legcombo16 <- get_legend(bishop.brood)
+bishop.brood <- bishop.brood + theme(legend.position = "none")
+all.combined = ggarrange(walsh.brood, walsh.micg, walsh.metsch, walsh.past, walsh.spiro,
+                         mill.brood, mill.micg, mill.metsch, mill.past, mill.spiro,
+                         cedar.brood, cedar.micg, cedar.metsch, cedar.past, cedar.spiro,
+                         crookedw.brood, crookedw.micg, crookedw.metsch, crookedw.past, crookedw.spiro,
+                         lilap.brood, lilap.micg, lilap.metsch, lilap.past, lilap.spiro,
+                         bishop.brood, bishop.micg, bishop.metsch, bishop.past, bishop.spiro, blank,
+                         legcombo7, legcombo16,
+                           nrow = 7, ncol = 5)
+
+all.combined = annotate_figure(all.combined,
+                           left = text_grob("Log(Spore Concentration + 1)", color = "black", face = "bold", size = 10,rot=90))
+
+#### saving combined plot
+ggsave(here("figures", "AllCombinedSporesTurnover.jpg"), all.combined, units = "in", width = 11, height = 8, dpi = 600)
+
+```

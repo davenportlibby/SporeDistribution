@@ -1,0 +1,576 @@
+---
+title: "SporePatchinessNearshoreOffshoreComparisons"
+author: "Elizabeth Davenport"
+date: '2023-11-22'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Initial stuff, including loading packages and importing data
+
+##loading packages
+```{r,message=F,warning=F}
+library(here)
+library(rstatix)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(ggpubr)
+```
+## loading files
+
+```{r,message=F,warning=F}
+# Tell R where files are stored
+here::i_am("scripts/SporePatchinessNearshoreOffshoreComparisons.Rmd")
+
+# Load Files
+a <- readr::read_csv(here("data/CV_Walsh_Locations.csv"))
+b <- readr::read_csv(here("data/CV_LilAp_Locations.csv"))
+c <- readr::read_csv(here("data/CV_Cedar_Locations.csv"))
+
+```
+
+##Walsh Comparisons
+```{r,message=F,warning=F}
+
+#### Walsh Round 1
+w1 = a %>%
+  filter(Round =="1")
+
+wl1 <- as.factor(w1$Location)
+wcv1 <- w1$CV
+
+## creating a data frame
+wdf1<- data.frame(wl1,wcv1)
+
+## Wilcoxon Test
+wtest<-compare_means(wcv1 ~ wl1,  data = wdf1, method="wilcox.test", paired = FALSE)
+wtest
+##all nonsignificant
+
+#### Walsh Round 2
+w2 = a %>%
+  filter(Round =="2")
+
+wl2 <- as.factor(w2$Location)
+wcv2 <- w2$CV
+
+## creating a data frame
+wdf2<- data.frame(wl2,wcv2)
+
+## Wilcoxon Test
+wtest2<-compare_means(wcv2 ~ wl2,  data = wdf2, method="wilcox.test", paired = FALSE)
+wtest2
+##all nonsignificant
+
+#### Walsh Round 3
+w3 = a %>%
+  filter(Round =="3")
+
+wl3 <- as.factor(w3$Location)
+wcv3 <- w3$CV
+
+## creating a data frame
+wdf3<- data.frame(wl3,wcv3)
+
+## Wilcoxon Test
+wtest3<-compare_means(wcv3 ~ wl3,  data = wdf3, method="wilcox.test", paired = FALSE)
+wtest3
+##all nonsignificant
+
+#### Walsh Round 4
+w4 = a %>%
+  filter(Round =="4")
+
+wl4 <- as.factor(w4$Location)
+wcv4 <- w4$CV
+
+## creating a data frame
+wdf4<- data.frame(wl4,wcv4)
+
+## Wilcoxon Test
+wtest4<-compare_means(wcv4 ~ wl4,  data = wdf4, method="wilcox.test", paired = FALSE)
+wtest4
+##all nonsignificant
+
+#### Walsh Round 5
+w5 = a %>%
+  filter(Round =="5")
+
+wl5 <- as.factor(w5$Location)
+wcv5 <- w5$CV
+
+## creating a data frame
+wdf5<- data.frame(wl5,wcv5)
+
+## Wilcoxon Test
+wtest5<-compare_means(wcv5 ~ wl5,  data = wdf5, method="wilcox.test", paired = FALSE)
+wtest5
+##all nonsignificant
+
+#### Walsh Round 6
+w6 = a %>%
+  filter(Round =="6")
+
+wl6 <- as.factor(w6$Location)
+wcv6 <- w6$CV
+
+## creating a data frame
+wdf6<- data.frame(wl6,wcv6)
+
+## Wilcoxon Test
+wtest6<-compare_means(wcv6 ~ wl6,  data = wdf6, method="wilcox.test", paired = FALSE)
+wtest6
+##all nonsignificant
+
+#### Walsh Round 7
+w7 = a %>%
+  filter(Round =="7")
+
+wl7 <- as.factor(w7$Location)
+wcv7 <- w7$CV
+
+## creating a data frame
+wdf7<- data.frame(wl7,wcv7)
+
+## Wilcoxon Test
+wtest7<-compare_means(wcv7 ~ wl7,  data = wdf7, method="wilcox.test", paired = FALSE)
+wtest7
+##all nonsignificant
+
+#### Walsh Round 8
+w8 = a %>%
+  filter(Round =="8")
+
+wl8 <- as.factor(w8$Location)
+wcv8 <- w8$CV
+
+## creating a data frame
+wdf8<- data.frame(wl8,wcv8)
+
+## Wilcoxon Test
+wtest8<-compare_means(wcv8 ~ wl8,  data = wdf8, method="wilcox.test", paired = FALSE)
+wtest8
+##basin significantly patchier than intermediate
+##basin significantly patchier than nearshore
+
+#### Walsh Round 9
+w9 = a %>%
+  filter(Round =="9")
+
+wl9 <- as.factor(w9$Location)
+wcv9 <- w9$CV
+
+## creating a data frame
+wdf9<- data.frame(wl9,wcv9)
+
+## Wilcoxon Test
+wtest9<-compare_means(wcv9 ~ wl9,  data = wdf9, method="wilcox.test", paired = FALSE)
+wtest9
+##basin significantly patchier than intermediate
+##basin significantly patchier than nearshore
+
+#### Walsh Round 10
+w10 = a %>%
+  filter(Round =="10")
+
+wl10 <- as.factor(w10$Location)
+wcv10 <- w10$CV
+
+## creating a data frame
+wdf10<- data.frame(wl10,wcv10)
+
+## Wilcoxon Test
+wtest10<-compare_means(wcv10 ~ wl10,  data = wdf10, method="wilcox.test", paired = FALSE)
+wtest10
+##all nonsignificant
+
+#### Walsh Round 11
+w11 = a %>%
+  filter(Round =="11")
+
+wl11 <- as.factor(w11$Location)
+wcv11 <- w11$CV
+
+## creating a data frame
+wdf11<- data.frame(wl11,wcv11)
+
+## Wilcoxon Test
+wtest11<-compare_means(wcv11 ~ wl11,  data = wdf11, method="wilcox.test", paired = FALSE)
+wtest11
+##intermediate significantly patchier than basin
+##nearshore significantly patchier than basin
+
+#### Walsh Round 12
+w12 = a %>%
+  filter(Round =="12")
+
+wl12 <- as.factor(w12$Location)
+wcv12 <- w12$CV
+
+## creating a data frame
+wdf12<- data.frame(wl12,wcv12)
+
+## Wilcoxon Test
+wtest12<-compare_means(wcv12 ~ wl12,  data = wdf12, method="wilcox.test", paired = FALSE)
+wtest12
+##intermediate significantly patchier than nearshore
+```
+
+## LilAp Comparisons
+```{r,message=F,warning=F}
+#### LilAp Round 1
+l1 = b %>%
+  filter(Round =="1")
+
+ll1 <- as.factor(l1$Location)
+lcv1 <- l1$CV
+
+## creating a data frame
+ldf1<- data.frame(ll1,lcv1)
+
+## Wilcoxon Test
+ltest<-compare_means(lcv1 ~ ll1,  data = ldf1, method="wilcox.test", paired = FALSE)
+ltest
+##all nonsignificant
+
+#### LilAp Round 2
+l2 = b %>%
+  filter(Round =="2")
+
+ll2 <- as.factor(l2$Location)
+lcv2 <- l2$CV
+
+## creating a data frame
+ldf2<- data.frame(ll2,lcv2)
+
+## Wilcoxon Test
+ltest2<-compare_means(lcv2 ~ ll2,  data = ldf2, method="wilcox.test", paired = FALSE)
+ltest2
+##all nonsignificant
+
+#### LilAp Round 3
+## cannot analyze round 3 because didn't sample nearshore because of thunderstorm in field
+
+#### LilAp Round 4
+l4 = b %>%
+  filter(Round =="4")
+
+ll4 <- as.factor(l4$Location)
+lcv4 <- l4$CV
+
+## creating a data frame
+ldf4<- data.frame(ll4,lcv4)
+
+## Wilcoxon Test
+ltest4<-compare_means(lcv4 ~ ll4,  data = ldf4, method="wilcox.test", paired = FALSE)
+ltest4
+##all nonsignificant
+
+#### LilAp Round 5
+l5 = b %>%
+  filter(Round =="5")
+
+ll5 <- as.factor(l5$Location)
+lcv5 <- l5$CV
+
+## creating a data frame
+ldf5<- data.frame(ll5,lcv5)
+
+## Wilcoxon Test
+ltest5<-compare_means(lcv5 ~ ll5,  data = ldf5, method="wilcox.test", paired = FALSE)
+ltest5
+##all nonsignificant
+
+#### LilAp Round 6
+l6 = b %>%
+  filter(Round =="6")
+
+ll6 <- as.factor(l6$Location)
+lcv6 <- l6$CV
+
+## creating a data frame
+ldf6<- data.frame(ll6,lcv6)
+
+## Wilcoxon Test
+ltest6<-compare_means(lcv6 ~ ll6,  data = ldf6, method="wilcox.test", paired = FALSE)
+ltest6
+##all nonsignificant
+
+#### LilAp Round 7
+l7 = b %>%
+  filter(Round =="7")
+
+ll7 <- as.factor(l7$Location)
+lcv7 <- l7$CV
+
+## creating a data frame
+ldf7<- data.frame(ll7,lcv7)
+
+## Wilcoxon Test
+ltest7<-compare_means(lcv7 ~ ll7,  data = ldf7, method="wilcox.test", paired = FALSE)
+ltest7
+##all nonsignificant
+
+#### LilAp Round 8
+l8 = b %>%
+  filter(Round =="8")
+
+ll8 <- as.factor(l8$Location)
+lcv8 <- l8$CV
+
+## creating a data frame
+ldf8<- data.frame(ll8,lcv8)
+
+## Wilcoxon Test
+ltest8<-compare_means(lcv8 ~ ll8,  data = ldf8, method="wilcox.test", paired = FALSE)
+ltest8
+##basin significantly less patchy than intermediate
+
+#### LilAp Round 9
+l9 = b %>%
+  filter(Round =="9")
+
+ll9 <- as.factor(l9$Location)
+lcv9 <- l9$CV
+
+## creating a data frame
+ldf9<- data.frame(ll9,lcv9)
+
+## Wilcoxon Test
+ltest9<-compare_means(lcv9 ~ ll9,  data = ldf9, method="wilcox.test", paired = FALSE)
+ltest9
+##all nonsignificant
+
+#### LilAp Round 10
+l10 = b %>%
+  filter(Round =="10")
+
+ll10 <- as.factor(l10$Location)
+lcv10 <- l10$CV
+
+## creating a data frame
+ldf10<- data.frame(ll10,lcv10)
+
+## Wilcoxon Test
+ltest10<-compare_means(lcv10 ~ ll10,  data = ldf10, method="wilcox.test", paired = FALSE)
+ltest10
+##all nonsignificant
+
+#### LilAp Round 11
+l11 = b %>%
+  filter(Round =="11")
+
+ll11 <- as.factor(l11$Location)
+lcv11 <- l11$CV
+
+## creating a data frame
+ldf11<- data.frame(ll11,lcv11)
+
+## Wilcoxon Test
+ltest11<-compare_means(lcv11 ~ ll11,  data = ldf11, method="wilcox.test", paired = FALSE)
+ltest11
+##all nonsignificant
+
+#### LilAp Round 12
+l12 = b %>%
+  filter(Round =="12")
+
+ll12 <- as.factor(l12$Location)
+lcv12 <- l12$CV
+
+## creating a data frame
+ldf12<- data.frame(ll12,lcv12)
+
+## Wilcoxon Test
+ltest12<-compare_means(lcv12 ~ ll12,  data = ldf12, method="wilcox.test", paired = FALSE)
+ltest12
+##all nonsignificant
+```
+
+## Cedar Comparisons
+```{r,message=F,warning=F}
+#### Cedar Round 1
+c1 = c %>%
+  filter(Round =="1")
+
+cl1 <- as.factor(c1$Locations)
+ccv1 <- c1$CV
+
+## creating a data frame
+cdf1<- data.frame(cl1,ccv1)
+
+## Wilcoxon Test
+ctest<-compare_means(ccv1 ~ cl1,  data = cdf1, method="wilcox.test", paired = FALSE)
+ctest
+##all nonsignificant
+
+#### Cedar Round 2
+c2 = c %>%
+  filter(Round =="2")
+
+cl2 <- as.factor(c2$Locations)
+ccv2 <- c2$CV
+
+## creating a data frame
+cdf2<- data.frame(cl2,ccv2)
+
+## Wilcoxon Test
+ctest2<-compare_means(ccv2 ~ cl2,  data = cdf2, method="wilcox.test", paired = FALSE)
+ctest2
+##all nonsignificant
+
+#### Cedar Round 3
+c3 = c %>%
+  filter(Round =="3")
+
+cl3 <- as.factor(c3$Locations)
+ccv3 <- c3$CV
+
+## creating a data frame
+cdf3<- data.frame(cl3,ccv3)
+
+## Wilcoxon Test
+ctest3<-compare_means(ccv3 ~ cl3,  data = cdf3, method="wilcox.test", paired = FALSE)
+ctest3
+##all nonsignificant
+
+#### Cedar Round 4
+c4 = c %>%
+  filter(Round =="4")
+
+cl4 <- as.factor(c4$Locations)
+ccv4 <- c4$CV
+
+## creating a data frame
+cdf4<- data.frame(cl4,ccv4)
+
+## Wilcoxon Test
+ctest4<-compare_means(ccv4 ~ cl4,  data = cdf4, method="wilcox.test", paired = FALSE)
+ctest4
+##all nonsignificant
+
+#### Cedar Round 5
+c5 = c %>%
+  filter(Round =="5")
+
+cl5 <- as.factor(c5$Locations)
+ccv5 <- c5$CV
+
+## creating a data frame
+cdf5<- data.frame(cl5,ccv5)
+
+## Wilcoxon Test
+ctest5<-compare_means(ccv5 ~ cl5,  data = cdf5, method="wilcox.test", paired = FALSE)
+ctest5
+##all nonsignificant
+
+#### Cedar Round 6
+c6 = c %>%
+  filter(Round =="6")
+
+cl6 <- as.factor(c6$Locations)
+ccv6 <- c6$CV
+
+## creating a data frame
+cdf6<- data.frame(cl6,ccv6)
+
+## Wilcoxon Test
+ctest6<-compare_means(ccv6 ~ cl6,  data = cdf6, method="wilcox.test", paired = FALSE)
+ctest6
+##all nonsignificant
+
+#### Cedar Round 7
+c7 = c %>%
+  filter(Round =="7")
+
+cl7 <- as.factor(c7$Locations)
+ccv7 <- c7$CV
+
+## creating a data frame
+cdf7<- data.frame(cl7,ccv7)
+
+## Wilcoxon Test
+ctest7<-compare_means(ccv7 ~ cl7,  data = cdf7, method="wilcox.test", paired = FALSE)
+ctest7
+##all nonsignificant
+
+#### Cedar Round 8
+c8 = c %>%
+  filter(Round =="8")
+
+cl8 <- as.factor(c8$Locations)
+ccv8 <- c8$CV
+
+## creating a data frame
+cdf8<- data.frame(cl8,ccv8)
+
+## Wilcoxon Test
+ctest8<-compare_means(ccv8 ~ cl8,  data = cdf8, method="wilcox.test", paired = FALSE)
+ctest8
+##all nonsignificant
+
+#### Cedar Round 9
+c9 = c %>%
+  filter(Round =="9")
+
+cl9 <- as.factor(c9$Locations)
+ccv9 <- c9$CV
+
+## creating a data frame
+cdf9<- data.frame(cl9,ccv9)
+
+## Wilcoxon Test
+ctest9<-compare_means(ccv9 ~ cl9,  data = cdf9, method="wilcox.test", paired = FALSE)
+ctest9
+##all nonsignificant
+
+#### Cedar Round 10
+c10 = c %>%
+  filter(Round =="10")
+
+cl10 <- as.factor(c10$Locations)
+ccv10 <- c10$CV
+
+## creating a data frame
+cdf10<- data.frame(cl10,ccv10)
+
+## Wilcoxon Test
+ctest10<-compare_means(ccv10 ~ cl10,  data = cdf10, method="wilcox.test", paired = FALSE)
+ctest10
+##all nonsignificant
+
+#### Cedar Round 11
+c11 = c %>%
+  filter(Round =="11")
+
+cl11 <- as.factor(c11$Locations)
+ccv11 <- c11$CV
+
+## creating a data frame
+cdf11<- data.frame(cl11,ccv11)
+
+## Wilcoxon Test
+ctest11<-compare_means(ccv11 ~ cl11,  data = cdf11, method="wilcox.test", paired = FALSE)
+ctest11
+##all nonsignificant
+
+#### Cedar Round 12
+c12 = c %>%
+  filter(Round =="12")
+
+cl12 <- as.factor(c12$Locations)
+ccv12 <- c12$CV
+
+## creating a data frame
+cdf12<- data.frame(cl12,ccv12)
+
+## Wilcoxon Test
+ctest12<-compare_means(ccv12 ~ cl12,  data = cdf12, method="wilcox.test", paired = FALSE)
+ctest12
+##intermediate significantly patchier than nearshore
+```
+
