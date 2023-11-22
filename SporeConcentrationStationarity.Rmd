@@ -1,0 +1,2757 @@
+---
+title: "SporeConcentrationStationarity"
+author: "Elizabeth Davenport"
+date: '2023-11-22'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Initial stuff, including loading packages and importing data
+
+##loading packages
+```{r,message=F,warning=F}
+library(here)
+library(forecast)
+library(ggplot2)
+library(tseries)
+library(tidyverse)
+library(dplyr)
+```
+## loading files
+
+```{r,message=F,warning=F}
+# Tell R where files are stored
+here::i_am("scripts/SporeConcentrationStationarity.Rmd")
+
+# Load Files
+a <- readr::read_csv(here("data/SporeConcentrationsByDepthAll.csv"))
+
+```
+
+
+# Stationarity
+```{r,message=F,warning=F}
+## Augmented Dickey-Fuller Test
+## H0 is that the time series is non-stationary
+
+## if p > 0.05, then the time series has some time-dependent structure and does not exhibit constant variance
+
+metsch.w1 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Metschnikowia",
+         Depth=="1")
+
+metsch.w1.x <- metsch.w1$Concentration
+
+adf.test(x = metsch.w1.x, alternative = "stationary")
+## p > 0.99, nonstationary
+
+metsch.w2 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Metschnikowia",
+         Depth=="2")
+
+metsch.w2.x <- metsch.w2$Concentration
+
+adf.test(x = metsch.w2.x, alternative = "stationary")
+## p > 0.99, nonstationary
+
+metsch.w3 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Metschnikowia",
+         Depth=="3")
+
+metsch.w3.x <- metsch.w3$Concentration
+
+adf.test(x = metsch.w3.x, alternative = "stationary")
+## p = 0.554, nonstationary
+
+metsch.w4 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Metschnikowia",
+         Depth=="4")
+
+metsch.w4.x <- metsch.w4$Concentration
+
+adf.test(x = metsch.w4.x, alternative = "stationary")
+## p > 0.99, nonstationary
+
+metsch.w5 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Metschnikowia",
+         Depth=="5")
+
+metsch.w5.x <- metsch.w5$Concentration
+
+adf.test(x = metsch.w5.x, alternative = "stationary")
+## p = 0.954, nonstationary
+
+metsch.w6 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Metschnikowia",
+         Depth=="6")
+
+metsch.w6.x <- metsch.w6$Concentration
+
+adf.test(x = metsch.w6.x, alternative = "stationary")
+## p = 0.9004, nonstationary
+
+metsch.w0 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Metschnikowia",
+         Depth=="0")
+
+metsch.w0.x <- metsch.w0$Concentration
+
+adf.test(x = metsch.w0.x, alternative = "stationary")
+## can't be tested, too few values
+
+### MicG Walsh
+
+mg.w1 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Ordospora",
+         Depth=="1")
+
+mg.w1.x <- mg.w1$Concentration
+
+adf.test(x = mg.w1.x, alternative = "stationary")
+## p = 0.852, nonstationary
+
+mg.w2 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Ordospora",
+         Depth=="2")
+
+mg.w2.x <- mg.w2$Concentration
+
+adf.test(x = mg.w2.x, alternative = "stationary")
+## p > 0.544, nonstationary
+
+mg.w3 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Ordospora",
+         Depth=="3")
+
+mg.w3.x <- mg.w3$Concentration
+
+adf.test(x = mg.w3.x, alternative = "stationary")
+## p = 0.638, nonstationary
+
+mg.w4 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Ordospora",
+         Depth=="4")
+
+mg.w4.x <- mg.w4$Concentration
+
+adf.test(x = mg.w4.x, alternative = "stationary")
+## p > 0.868, nonstationary
+
+mg.w5 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Ordospora",
+         Depth=="5")
+
+mg.w5.x <- mg.w5$Concentration
+
+adf.test(x = mg.w5.x, alternative = "stationary")
+## p = 0.681, nonstationary
+
+mg.w6 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Ordospora",
+         Depth=="6")
+
+mg.w6.x <- mg.w6$Concentration
+
+adf.test(x = mg.w6.x, alternative = "stationary")
+## p = 0.873, nonstationary
+
+mg.w0 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Ordospora",
+         Depth=="0")
+
+mg.w0.x <- mg.w0$Concentration
+
+adf.test(x = mg.w0.x, alternative = "stationary")
+## can't be tested, too few values
+
+### Pasteuria Walsh
+
+p.w1 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Pasteuria",
+         Depth=="1")
+
+p.w1.x <- p.w1$Concentration
+
+adf.test(x = p.w1.x, alternative = "stationary")
+## p = 0.831, nonstationary
+
+p.w2 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Pasteuria",
+         Depth=="2")
+
+p.w2.x <- p.w2$Concentration
+
+adf.test(x = p.w2.x, alternative = "stationary")
+## p > 0.99, nonstationary
+
+p.w3 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Pasteuria",
+         Depth=="3")
+
+p.w3.x <- p.w3$Concentration
+
+adf.test(x = p.w3.x, alternative = "stationary")
+## p = 0.807, nonstationary
+
+p.w4 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Pasteuria",
+         Depth=="4")
+
+p.w4.x <- p.w4$Concentration
+
+adf.test(x = p.w4.x, alternative = "stationary")
+## p = 0.771, nonstationary
+
+p.w5 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Pasteuria",
+         Depth=="5")
+
+p.w5.x <- p.w5$Concentration
+
+adf.test(x = p.w5.x, alternative = "stationary")
+## p = 0.543, nonstationary
+
+p.w6 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Pasteuria",
+         Depth=="6")
+
+p.w6.x <- p.w6$Concentration
+
+adf.test(x = p.w6.x, alternative = "stationary")
+## p = 0.811, nonstationary
+
+p.w0 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Pasteuria",
+         Depth=="0")
+
+p.w0.x <- p.w0$Concentration
+
+adf.test(x = p.w0.x, alternative = "stationary")
+## can't be tested, too few values
+
+### Blastulidium Walsh
+
+b.w1 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Blastulidium",
+         Depth=="1")
+
+b.w1.x <- b.w1$Concentration
+
+adf.test(x = b.w1.x, alternative = "stationary")
+## p = 0.883, nonstationary
+
+b.w2 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Blastulidium",
+         Depth=="2")
+
+b.w2.x <- b.w2$Concentration
+
+adf.test(x = b.w2.x, alternative = "stationary")
+## p = 0.908, nonstationary
+
+b.w3 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Blastulidium",
+         Depth=="3")
+
+b.w3.x <- b.w3$Concentration
+
+adf.test(x = b.w3.x, alternative = "stationary")
+## p = 0.868, nonstationary
+
+b.w4 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Blastulidium",
+         Depth=="4")
+
+b.w4.x <- b.w4$Concentration
+
+adf.test(x = b.w4.x, alternative = "stationary")
+## p = 0.876, nonstationary
+
+b.w5 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Blastulidium",
+         Depth=="5")
+
+b.w5.x <- b.w5$Concentration
+
+adf.test(x = b.w5.x, alternative = "stationary")
+## p = 0.835, nonstationary
+
+b.w6 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Blastulidium",
+         Depth=="6")
+
+b.w6.x <- b.w6$Concentration
+
+adf.test(x = b.w6.x, alternative = "stationary")
+## p = 0.619, nonstationary
+
+b.w0 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Blastulidium",
+         Depth=="0")
+
+b.w0.x <- b.w0$Concentration
+
+adf.test(x = b.w0.x, alternative = "stationary")
+## can't be tested, too few values
+
+
+### Spirobacillus Walsh
+
+s.w1 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Spirobacillus",
+         Depth=="1")
+
+s.w1.x <- s.w1$Concentration
+
+adf.test(x = s.w1.x, alternative = "stationary")
+## p = 0.492, nonstationary
+
+s.w2 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Spirobacillus",
+         Depth=="2")
+
+s.w2.x <- s.w2$Concentration
+
+adf.test(x = s.w2.x, alternative = "stationary")
+## p = 0.347, nonstationary
+
+s.w3 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Spirobacillus",
+         Depth=="3")
+
+s.w3.x <- s.w3$Concentration
+
+adf.test(x = s.w3.x, alternative = "stationary")
+## p = 0.4263, nonstationary
+
+s.w4 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Spirobacillus",
+         Depth=="4")
+
+s.w4.x <- s.w4$Concentration
+
+adf.test(x = s.w4.x, alternative = "stationary")
+## p = 0.523, nonstationary
+
+s.w5 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Spirobacillus",
+         Depth=="5")
+
+s.w5.x <- s.w5$Concentration
+
+adf.test(x = s.w5.x, alternative = "stationary")
+## p = 0.676, nonstationary
+
+s.w6 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Spirobacillus",
+         Depth=="6")
+
+s.w6.x <- s.w6$Concentration
+
+adf.test(x = s.w6.x, alternative = "stationary")
+## p = 0.869, nonstationary
+
+s.w0 = a %>%
+  filter(Lake== "Walsh",
+         Parasite=="Spirobacillus",
+         Depth=="0")
+
+s.w0.x <- s.w0$Concentration
+
+adf.test(x = s.w0.x, alternative = "stationary")
+## can't be tested, too few values
+
+#### Bishop ##############
+
+metsch.b1 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="1")
+
+metsch.b1.x <- metsch.b1$Concentration
+
+adf.test(x = metsch.b1.x, alternative = "stationary")
+## p = 0.01, stationary
+
+metsch.b2 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="2")
+
+metsch.b2.x <- metsch.b2$Concentration
+
+adf.test(x = metsch.b2.x, alternative = "stationary")
+## p = 0.5324, nonstationary
+
+metsch.b3 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="3")
+
+metsch.b3.x <- metsch.b3$Concentration
+
+adf.test(x = metsch.b3.x, alternative = "stationary")
+## p = 0.01, stationary
+
+metsch.b4 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="4")
+
+metsch.b4.x <- metsch.b4$Concentration
+
+adf.test(x = metsch.b4.x, alternative = "stationary")
+## p = 0.01, stationary
+
+metsch.b5 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="5")
+
+metsch.b5.x <- metsch.b5$Concentration
+
+adf.test(x = metsch.b5.x, alternative = "stationary")
+## p = 0.2852, nonstationary
+
+metsch.b6 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="6")
+
+metsch.b6.x <- metsch.b6$Concentration
+
+adf.test(x = metsch.b6.x, alternative = "stationary")
+## p = 0.01, stationary
+
+metsch.b7 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="7")
+
+metsch.b7.x <- metsch.b7$Concentration
+
+adf.test(x = metsch.b7.x, alternative = "stationary")
+## p = 0.5018, nonstationary
+
+metsch.b8 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="8")
+
+metsch.b8.x <- metsch.b8$Concentration
+
+adf.test(x = metsch.b8.x, alternative = "stationary")
+## p = 0.01, stationary
+
+metsch.b9 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="9")
+
+metsch.b9.x <- metsch.b9$Concentration
+
+adf.test(x = metsch.b9.x, alternative = "stationary")
+## p = 0.02468, stationary
+
+metsch.b10 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="10")
+
+metsch.b10.x <- metsch.b10$Concentration
+
+adf.test(x = metsch.b10.x, alternative = "stationary")
+## p = 0.07, nonstationary
+
+metsch.b11 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="11")
+
+metsch.b11.x <- metsch.b11$Concentration
+
+adf.test(x = metsch.b11.x, alternative = "stationary")
+## p = 0.09, nonstationary
+
+metsch.b12 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="12")
+
+metsch.b12.x <- metsch.b12$Concentration
+
+adf.test(x = metsch.b12.x, alternative = "stationary")
+## p = 0.13, nonstationary
+
+metsch.b13 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="13")
+
+metsch.b13.x <- metsch.b13$Concentration
+
+adf.test(x = metsch.b13.x, alternative = "stationary")
+## p = 0.86, nonstationary
+
+metsch.b14 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="14")
+
+metsch.b14.x <- metsch.b14$Concentration
+
+adf.test(x = metsch.b14.x, alternative = "stationary")
+## p = 0.86, nonstationary
+
+metsch.b15 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="15")
+
+metsch.b15.x <- metsch.b15$Concentration
+
+adf.test(x = metsch.b15.x, alternative = "stationary")
+## p = 0.01, stationary
+
+metsch.b16 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="16")
+
+metsch.b16.x <- metsch.b16$Concentration
+
+adf.test(x = metsch.b16.x, alternative = "stationary")
+## p = 0.08, nonstationary
+
+metsch.b0 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Metschnikowia",
+         Depth=="0")
+
+metsch.b0.x <- metsch.b0$Concentration
+
+adf.test(x = metsch.b0.x, alternative = "stationary")
+## can't be tested, too few values
+
+### MicG Bishop
+
+mg.b1 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="1")
+
+mg.b1.x <- mg.b1$Concentration
+
+adf.test(x = mg.b1.x, alternative = "stationary")
+## p = 0.78, nonstationary
+
+mg.b2 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="2")
+
+mg.b2.x <- mg.b2$Concentration
+
+adf.test(x = mg.b2.x, alternative = "stationary")
+## p = 0.97, nonstationary
+
+mg.b3 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="3")
+
+mg.b3.x <- mg.b3$Concentration
+
+adf.test(x = mg.b3.x, alternative = "stationary")
+## p = 0.77, nonstationary
+
+mg.b4 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="4")
+
+mg.b4.x <- mg.b4$Concentration
+
+adf.test(x = mg.b4.x, alternative = "stationary")
+## p = 0.13, nonstationary
+
+mg.b5 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="5")
+
+mg.b5.x <- mg.b5$Concentration
+
+adf.test(x = mg.b5.x, alternative = "stationary")
+## p = 0.9, nonstationary
+
+mg.b6 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="6")
+
+mg.b6.x <- mg.b6$Concentration
+
+adf.test(x = mg.b6.x, alternative = "stationary")
+## p = 0.98, nonstationary
+
+mg.b7 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="7")
+
+mg.b7.x <- mg.b7$Concentration
+
+adf.test(x = mg.b7.x, alternative = "stationary")
+## p = 0.94, nonstationary
+
+mg.b8 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="8")
+
+mg.b8.x <- mg.b8$Concentration
+
+adf.test(x = mg.b8.x, alternative = "stationary")
+## p = 0.96, nonstationary
+
+mg.b9 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="9")
+
+mg.b9.x <- mg.b9$Concentration
+
+adf.test(x = mg.b9.x, alternative = "stationary")
+## p = 0.39, nonstationary
+
+mg.b10 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="10")
+
+mg.b10.x <- mg.b10$Concentration
+
+adf.test(x = mg.b10.x, alternative = "stationary")
+## p = 0.28, nonstationary
+
+mg.b11 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="11")
+
+mg.b11.x <- mg.b11$Concentration
+
+adf.test(x = mg.b11.x, alternative = "stationary")
+## p = 0.47, nonstationary
+
+mg.b12 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="12")
+
+mg.b12.x <- mg.b12$Concentration
+
+adf.test(x = mg.b12.x, alternative = "stationary")
+## p < 0.01, stationary
+
+mg.b13 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="13")
+
+mg.b13.x <- mg.b13$Concentration
+
+adf.test(x = mg.b13.x, alternative = "stationary")
+## p = 0.44, nonstationary
+
+mg.b14 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="14")
+
+mg.b14.x <- mg.b14$Concentration
+
+adf.test(x = mg.b14.x, alternative = "stationary")
+## p = 0.85, nonstationary
+
+mg.b15 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="15")
+
+mg.b15.x <- mg.b15$Concentration
+
+adf.test(x = mg.b15.x, alternative = "stationary")
+## p = 0.75, nonstationary
+
+mg.b16 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="16")
+
+mg.b16.x <- mg.b16$Concentration
+
+adf.test(x = mg.b16.x, alternative = "stationary")
+## p < 0.01, stationary
+
+mg.b0 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Ordospora",
+         Depth=="0")
+
+mg.b0.x <- mg.b0$Concentration
+
+adf.test(x = mg.b0.x, alternative = "stationary")
+## can't be tested, too few values
+
+### Pasteuria Bishop
+
+p.b1 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="1")
+
+p.b1.x <- p.b1$Concentration
+
+adf.test(x = p.b1.x, alternative = "stationary")
+## p = 0.45, nonstationary
+
+p.b2 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="2")
+
+p.b2.x <- p.b2$Concentration
+
+adf.test(x = p.b2.x, alternative = "stationary")
+## p = 0.91, nonstationary
+
+p.b3 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="3")
+
+p.b3.x <- p.b3$Concentration
+
+adf.test(x = p.b3.x, alternative = "stationary")
+## p = 0.95, nonstationary
+
+p.b4 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="4")
+
+p.b4.x <- p.b4$Concentration
+
+adf.test(x = p.b4.x, alternative = "stationary")
+## p = 0.95, nonstationary
+
+p.b5 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="5")
+
+p.b5.x <- p.b5$Concentration
+
+adf.test(x = p.b5.x, alternative = "stationary")
+## p = 0.94, nonstationary
+
+p.b6 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="6")
+
+p.b6.x <- p.b6$Concentration
+
+adf.test(x = p.b6.x, alternative = "stationary")
+## p = 0.43, nonstationary
+
+p.b7 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="7")
+
+p.b7.x <- p.b7$Concentration
+
+adf.test(x = p.b7.x, alternative = "stationary")
+## p > 0.99, nonstationary
+
+p.b8 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="8")
+
+p.b8.x <- p.b8$Concentration
+
+adf.test(x = p.b8.x, alternative = "stationary")
+## p = 0.94, nonstationary
+
+p.b9 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="9")
+
+p.b9.x <- p.b9$Concentration
+
+adf.test(x = p.b9.x, alternative = "stationary")
+## p = 0.76, nonstationary
+
+p.b10 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="10")
+
+p.b10.x <- p.b10$Concentration
+
+adf.test(x = p.b10.x, alternative = "stationary")
+## p = 0.92, nonstationary
+
+p.b11 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="11")
+
+p.b11.x <- p.b11$Concentration
+
+adf.test(x = p.b11.x, alternative = "stationary")
+## p = 0.75, nonstationary
+
+p.b12 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="12")
+
+p.b12.x <- p.b12$Concentration
+
+adf.test(x = p.b12.x, alternative = "stationary")
+## p = 0.70, nonstationary
+
+p.b13 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="13")
+
+p.b13.x <- p.b13$Concentration
+
+adf.test(x = p.b13.x, alternative = "stationary")
+## p = 0.96, nonstationary
+
+p.b14 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="14")
+
+p.b14.x <- p.b14$Concentration
+
+adf.test(x = p.b14.x, alternative = "stationary")
+## p = 0.44, nonstationary
+
+p.b15 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="15")
+
+p.b15.x <- p.b15$Concentration
+
+adf.test(x = p.b15.x, alternative = "stationary")
+## p = 0.09, nonstationary
+
+p.b16 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="16")
+
+p.b16.x <- p.b16$Concentration
+
+adf.test(x = p.b16.x, alternative = "stationary")
+## p = 0.74, nonstationary
+
+p.b0 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Pasteuria",
+         Depth=="0")
+
+p.b0.x <- p.b0$Concentration
+
+adf.test(x = p.b0.x, alternative = "stationary")
+## can't be tested, too few values
+
+### Blastulidium Bishop
+
+b.b1 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="1")
+
+b.b1.x <- b.b1$Concentration
+
+adf.test(x = b.b1.x, alternative = "stationary")
+## p = 0.71, nonstationary
+
+b.b2 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="2")
+
+b.b2.x <- b.b2$Concentration
+
+adf.test(x = b.b2.x, alternative = "stationary")
+## p = 0.69, nonstationary
+
+b.b3 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="3")
+
+b.b3.x <- b.b3$Concentration
+
+adf.test(x = b.b3.x, alternative = "stationary")
+## p = 0.7, nonstationary
+
+b.b4 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="4")
+
+b.b4.x <- b.b4$Concentration
+
+adf.test(x = b.b4.x, alternative = "stationary")
+## p = 0.53, nonstationary
+
+b.b5 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="5")
+
+b.b5.x <- b.b5$Concentration
+
+adf.test(x = b.b5.x, alternative = "stationary")
+## p = 0.69, nonstationary
+
+b.b6 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="6")
+
+b.b6.x <- b.b6$Concentration
+
+adf.test(x = b.b6.x, alternative = "stationary")
+## p = 0.38, nonstationary
+
+b.b7 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="7")
+
+b.b7.x <- b.b7$Concentration
+
+adf.test(x = b.b7.x, alternative = "stationary")
+## p = 0.51, nonstationary
+
+b.b8 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="8")
+
+b.b8.x <- b.b8$Concentration
+
+adf.test(x = b.b8.x, alternative = "stationary")
+## p = 0.69, nonstationary
+
+b.b9 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="9")
+
+b.b9.x <- b.b9$Concentration
+
+adf.test(x = b.b9.x, alternative = "stationary")
+## p > 0.99, nonstationary
+
+b.b10 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="10")
+
+b.b10.x <- b.b10$Concentration
+
+adf.test(x = b.b10.x, alternative = "stationary")
+## p = 0.64, nonstationary
+
+b.b11 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="11")
+
+b.b11.x <- b.b11$Concentration
+
+adf.test(x = b.b11.x, alternative = "stationary")
+## p = 0.17, nonstationary
+
+b.b12 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="12")
+
+b.b12.x <- b.b12$Concentration
+
+adf.test(x = b.b12.x, alternative = "stationary")
+## p = 0.90, nonstationary
+
+b.b13 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="13")
+
+b.b13.x <- b.b13$Concentration
+
+adf.test(x = b.b13.x, alternative = "stationary")
+## p = 0.84, nonstationary
+
+b.b14 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="14")
+
+b.b14.x <- b.b14$Concentration
+
+adf.test(x = b.b14.x, alternative = "stationary")
+## p = 0.72, nonstationary
+
+b.b15 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="15")
+
+b.b15.x <- b.b15$Concentration
+
+adf.test(x = b.b15.x, alternative = "stationary")
+## p = 0.90, nonstationary
+
+b.b16 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="16")
+
+b.b16.x <- b.b16$Concentration
+
+adf.test(x = b.b16.x, alternative = "stationary")
+## p = 0.43, nonstationary
+
+b.b0 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Blastulidium",
+         Depth=="0")
+
+b.b0.x <- b.b0$Concentration
+
+adf.test(x = b.b0.x, alternative = "stationary")
+## can't be tested, too few values
+
+
+### Spirobacillus Bishop
+
+s.b1 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="1")
+
+s.b1.x <- s.b1$Concentration
+
+adf.test(x = s.b1.x, alternative = "stationary")
+## p = 0.87, nonstationary
+
+s.b2 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="2")
+
+s.b2.x <- s.b2$Concentration
+
+adf.test(x = s.b2.x, alternative = "stationary")
+## p = 0.79, nonstationary
+
+s.b3 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="3")
+
+s.b3.x <- s.b3$Concentration
+
+adf.test(x = s.b3.x, alternative = "stationary")
+## p = 0.81, nonstationary
+
+s.b4 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="4")
+
+s.b4.x <- s.b4$Concentration
+
+adf.test(x = s.b4.x, alternative = "stationary")
+## p = 0.78, nonstationary
+
+s.b5 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="5")
+
+s.b5.x <- s.b5$Concentration
+
+adf.test(x = s.b5.x, alternative = "stationary")
+## p = 0.8, nonstationary
+
+s.b6 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="6")
+
+s.b6.x <- s.b6$Concentration
+
+adf.test(x = s.b6.x, alternative = "stationary")
+## p = 0.94, nonstationary
+
+s.b7 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="7")
+
+s.b7.x <- s.b7$Concentration
+
+adf.test(x = s.b7.x, alternative = "stationary")
+## p < 0.01, stationary
+
+s.b8 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="8")
+
+s.b8.x <- s.b8$Concentration
+
+adf.test(x = s.b8.x, alternative = "stationary")
+## p = 0.98, nonstationary
+
+s.b9 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="9")
+
+s.b9.x <- s.b9$Concentration
+
+adf.test(x = s.b9.x, alternative = "stationary")
+## p = 0.98, nonstationary
+
+s.b10 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="10")
+
+s.b10.x <- s.b10$Concentration
+
+adf.test(x = s.b10.x, alternative = "stationary")
+## p > 0.99, nonstationary
+
+s.b11 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="11")
+
+s.b11.x <- s.b11$Concentration
+
+adf.test(x = s.b11.x, alternative = "stationary")
+## p = 0.98, nonstationary
+
+s.b12 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="12")
+
+s.b12.x <- s.b12$Concentration
+
+adf.test(x = s.b12.x, alternative = "stationary")
+## p = 0.79, nonstationary
+
+s.b13 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="13")
+
+s.b13.x <- s.b13$Concentration
+
+adf.test(x = s.b13.x, alternative = "stationary")
+## p = 0.95, nonstationary
+
+s.b14 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="14")
+
+s.b14.x <- s.b14$Concentration
+
+adf.test(x = s.b14.x, alternative = "stationary")
+## p = 0.60, nonstationary
+
+s.b15 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="15")
+
+s.b15.x <- s.b15$Concentration
+
+adf.test(x = s.b15.x, alternative = "stationary")
+## p = 0.93, nonstationary
+
+s.b16 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="16")
+
+s.b16.x <- s.b16$Concentration
+
+adf.test(x = s.b16.x, alternative = "stationary")
+## p = 0.79, nonstationary
+
+s.b0 = a %>%
+  filter(Lake== "Bishop",
+         Parasite=="Spirobacillus",
+         Depth=="0")
+
+s.b0.x <- s.b0$Concentration
+
+adf.test(x = s.b0.x, alternative = "stationary")
+## can't be tested, too few values
+
+############### Mill Metschnikowia ##########################
+
+metsch.m1 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Metschnikowia",
+         Depth=="1")
+
+metsch.m1.x <- metsch.m1$Concentration
+
+adf.test(x = metsch.m1.x, alternative = "stationary")
+## p = 0.75, nonstationary
+
+metsch.m2 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Metschnikowia",
+         Depth=="2")
+
+metsch.m2.x <- metsch.m2$Concentration
+
+adf.test(x = metsch.m2.x, alternative = "stationary")
+## p = 0.83, nonstationary
+
+metsch.m3 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Metschnikowia",
+         Depth=="3")
+
+metsch.m3.x <- metsch.m3$Concentration
+
+adf.test(x = metsch.m3.x, alternative = "stationary")
+## p = 0.88, nonstationary
+
+metsch.m4 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Metschnikowia",
+         Depth=="4")
+
+metsch.m4.x <- metsch.m4$Concentration
+
+adf.test(x = metsch.m4.x, alternative = "stationary")
+## p = 0.92, nonstationary
+
+metsch.m5 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Metschnikowia",
+         Depth=="5")
+
+metsch.m5.x <- metsch.m5$Concentration
+
+adf.test(x = metsch.m5.x, alternative = "stationary")
+## p = 0.84, nonstationary
+
+metsch.m6 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Metschnikowia",
+         Depth=="6")
+
+metsch.m6.x <- metsch.m6$Concentration
+
+adf.test(x = metsch.m6.x, alternative = "stationary")
+## can't be tested, too few values
+
+metsch.m0 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Metschnikowia",
+         Depth=="0")
+
+metsch.m0.x <- metsch.m0$Concentration
+
+adf.test(x = metsch.m0.x, alternative = "stationary")
+## can't be tested, too few values
+
+######## Mill MicG #####################
+
+mg.m1 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Ordospora",
+         Depth=="1")
+
+mg.m1.x <- mg.m1$Concentration
+
+adf.test(x = mg.m1.x, alternative = "stationary")
+## p = 0.72, nonstationary
+
+mg.m2 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Ordospora",
+         Depth=="2")
+
+mg.m2.x <- mg.m2$Concentration
+
+adf.test(x = mg.m2.x, alternative = "stationary")
+## p = 0.48, nonstationary
+
+mg.m3 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Ordospora",
+         Depth=="3")
+
+mg.m3.x <- mg.m3$Concentration
+
+adf.test(x = mg.m3.x, alternative = "stationary")
+## p = 0.95, nonstationary
+
+mg.m4 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Ordospora",
+         Depth=="4")
+
+mg.m4.x <- mg.m4$Concentration
+
+adf.test(x = mg.m4.x, alternative = "stationary")
+## p = 0.95, nonstationary
+
+mg.m5 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Ordospora",
+         Depth=="5")
+
+mg.m5.x <- mg.m5$Concentration
+
+adf.test(x = mg.m5.x, alternative = "stationary")
+## p = 0.91, nonstationary
+
+mg.m6 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Ordospora",
+         Depth=="6")
+
+mg.m6.x <- mg.m6$Concentration
+
+adf.test(x = mg.m6.x, alternative = "stationary")
+## can't be tested, too few values
+
+mg.m0 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Ordospora",
+         Depth=="0")
+
+mg.m0.x <- mg.m0$Concentration
+
+adf.test(x = mg.m0.x, alternative = "stationary")
+## can't be tested, too few values
+
+########## Mill Pasteuria #############################
+
+p.m1 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Pasteuria",
+         Depth=="1")
+
+p.m1.x <- p.m1$Concentration
+
+adf.test(x = p.m1.x, alternative = "stationary")
+## p = 0.51, nonstationary
+
+p.m2 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Pasteuria",
+         Depth=="2")
+
+p.m2.x <- p.m2$Concentration
+
+adf.test(x = p.m2.x, alternative = "stationary")
+## NA
+
+p.m3 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Pasteuria",
+         Depth=="3")
+
+p.m3.x <- p.m3$Concentration
+
+adf.test(x = p.m3.x, alternative = "stationary")
+## p = 0.44, nonstationary
+
+p.m4 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Pasteuria",
+         Depth=="4")
+
+p.m4.x <- p.m4$Concentration
+
+adf.test(x = p.m4.x, alternative = "stationary")
+## p = 0.65, nonstationary
+
+p.m5 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Pasteuria",
+         Depth=="5")
+
+p.m5.x <- p.m5$Concentration
+
+adf.test(x = p.m5.x, alternative = "stationary")
+## p = 0.81, nonstationary
+
+p.m6 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Pasteuria",
+         Depth=="6")
+
+p.m6.x <- p.m6$Concentration
+
+adf.test(x = p.m6.x, alternative = "stationary")
+## can't be tested, too few values
+
+p.m0 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Pasteuria",
+         Depth=="0")
+
+p.m0.x <- p.m0$Concentration
+
+adf.test(x = p.m0.x, alternative = "stationary")
+## can't be tested, too few values
+
+############# Mill Blastulidium #####################
+
+b.m1 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Blastulidium",
+         Depth=="1")
+
+b.m1.x <- b.m1$Concentration
+
+adf.test(x = b.m1.x, alternative = "stationary")
+## p = 0.85, nonstationary
+
+b.m2 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Blastulidium",
+         Depth=="2")
+
+b.m2.x <- b.m2$Concentration
+
+adf.test(x = b.m2.x, alternative = "stationary")
+## p = 0.66, nonstationary
+
+b.m3 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Blastulidium",
+         Depth=="3")
+
+b.m3.x <- b.m3$Concentration
+
+adf.test(x = b.m3.x, alternative = "stationary")
+## p = 0.72, nonstationary
+
+b.m4 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Blastulidium",
+         Depth=="4")
+
+b.m4.x <- b.m4$Concentration
+
+adf.test(x = b.m4.x, alternative = "stationary")
+## p = 0.86, nonstationary
+
+b.m5 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Blastulidium",
+         Depth=="5")
+
+b.m5.x <- b.m5$Concentration
+
+adf.test(x = b.m5.x, alternative = "stationary")
+## p = 0.82, nonstationary
+
+b.m6 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Blastulidium",
+         Depth=="6")
+
+b.m6.x <- b.m6$Concentration
+
+adf.test(x = b.m6.x, alternative = "stationary")
+## can't be tested, too few values
+
+b.m0 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Blastulidium",
+         Depth=="0")
+
+b.m0.x <- b.m0$Concentration
+
+adf.test(x = b.m0.x, alternative = "stationary")
+## can't be tested, too few values
+
+
+###### Mill Spirobacillus #####################
+
+s.m1 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Spirobacillus",
+         Depth=="1")
+
+s.m1.x <- s.m1$Concentration
+
+adf.test(x = s.m1.x, alternative = "stationary")
+## p = 0.49, nonstationary
+
+s.m2 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Spirobacillus",
+         Depth=="2")
+
+s.m2.x <- s.m2$Concentration
+
+adf.test(x = s.m2.x, alternative = "stationary")
+## p = 0.03, stationary
+
+s.m3 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Spirobacillus",
+         Depth=="3")
+
+s.m3.x <- s.m3$Concentration
+
+adf.test(x = s.m3.x, alternative = "stationary")
+## p = 0.25, nonstationary
+
+s.m4 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Spirobacillus",
+         Depth=="4")
+
+s.m4.x <- s.m4$Concentration
+
+adf.test(x = s.m4.x, alternative = "stationary")
+## p = 0.75, nonstationary
+
+s.m5 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Spirobacillus",
+         Depth=="5")
+
+s.m5.x <- s.m5$Concentration
+
+adf.test(x = s.m5.x, alternative = "stationary")
+## p = 0.54, nonstationary
+
+s.m6 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Spirobacillus",
+         Depth=="6")
+
+s.m6.x <- s.m6$Concentration
+
+adf.test(x = s.m6.x, alternative = "stationary")
+## can't be tested, too few values
+
+s.m0 = a %>%
+  filter(Lake== "Mill",
+         Parasite=="Spirobacillus",
+         Depth=="0")
+
+s.m0.x <- s.m0$Concentration
+
+adf.test(x = s.m0.x, alternative = "stationary")
+## can't be tested, too few values
+
+############### Cedar Metschnikowia ##########################
+
+metsch.c1 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Metschnikowia",
+         Depth=="1")
+
+metsch.c1.x <- metsch.c1$Concentration
+
+adf.test(x = metsch.c1.x, alternative = "stationary")
+## p = 0.55, nonstationary
+
+metsch.c2 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Metschnikowia",
+         Depth=="2")
+
+metsch.c2.x <- metsch.c2$Concentration
+
+adf.test(x = metsch.c2.x, alternative = "stationary")
+## p = 0.4, nonstationary
+
+metsch.c3 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Metschnikowia",
+         Depth=="3")
+
+metsch.c3.x <- metsch.c3$Concentration
+
+adf.test(x = metsch.c3.x, alternative = "stationary")
+## NA
+
+metsch.c4 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Metschnikowia",
+         Depth=="4")
+
+metsch.c4.x <- metsch.c4$Concentration
+
+adf.test(x = metsch.c4.x, alternative = "stationary")
+## p = 0.019, stationary
+
+metsch.c5 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Metschnikowia",
+         Depth=="5")
+
+metsch.c5.x <- metsch.c5$Concentration
+
+adf.test(x = metsch.c5.x, alternative = "stationary")
+## p = 0.32, nonstationary
+
+metsch.c6 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Metschnikowia",
+         Depth=="6")
+
+metsch.c6.x <- metsch.c6$Concentration
+
+adf.test(x = metsch.c6.x, alternative = "stationary")
+## p = 0.97, nonstationary
+
+metsch.c7 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Metschnikowia",
+         Depth=="7")
+
+metsch.c7.x <- metsch.c7$Concentration
+
+adf.test(x = metsch.c7.x, alternative = "stationary")
+## p = 0.45, nonstationary
+
+metsch.c0 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Metschnikowia",
+         Depth=="0")
+
+metsch.c0.x <- metsch.c0$Concentration
+
+adf.test(x = metsch.c0.x, alternative = "stationary")
+## can't be tested, too few values
+
+######## Cedar MicG #####################
+
+mg.c1 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Ordospora",
+         Depth=="1")
+
+mg.c1.x <- mg.c1$Concentration
+
+adf.test(x = mg.c1.x, alternative = "stationary")
+## p < 0.01, stationary
+
+mg.c2 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Ordospora",
+         Depth=="2")
+
+mg.c2.x <- mg.c2$Concentration
+
+adf.test(x = mg.c2.x, alternative = "stationary")
+## p = 0.47, nonstationary
+
+mg.c3 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Ordospora",
+         Depth=="3")
+
+mg.c3.x <- mg.c3$Concentration
+
+adf.test(x = mg.c3.x, alternative = "stationary")
+## p = 0.24, nonstationary
+
+mg.c4 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Ordospora",
+         Depth=="4")
+
+mg.c4.x <- mg.c4$Concentration
+
+adf.test(x = mg.c4.x, alternative = "stationary")
+## p = 0.01, stationary
+
+mg.c5 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Ordospora",
+         Depth=="5")
+
+mg.c5.x <- mg.c5$Concentration
+
+adf.test(x = mg.c5.x, alternative = "stationary")
+## p = 0.66, nonstationary
+
+mg.c6 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Ordospora",
+         Depth=="6")
+
+mg.c6.x <- mg.c6$Concentration
+
+adf.test(x = mg.c6.x, alternative = "stationary")
+## p > 0.99, nonstationary
+
+mg.c7 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Ordospora",
+         Depth=="7")
+
+mg.c7.x <- mg.c7$Concentration
+
+adf.test(x = mg.c7.x, alternative = "stationary")
+## p - 0.85, nonstationary
+
+mg.c0 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Ordospora",
+         Depth=="0")
+
+mg.c0.x <- mg.c0$Concentration
+
+adf.test(x = mg.c0.x, alternative = "stationary")
+## can't be tested, too few values
+
+########## Cedar Pasteuria #############################
+
+p.c1 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Pasteuria",
+         Depth=="1")
+
+p.c1.x <- p.c1$Concentration
+
+adf.test(x = p.c1.x, alternative = "stationary")
+## p = 0.68, nonstationary
+
+p.c2 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Pasteuria",
+         Depth=="2")
+
+p.c2.x <- p.c2$Concentration
+
+adf.test(x = p.c2.x, alternative = "stationary")
+## p = 0.51, nonstationary
+
+p.c3 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Pasteuria",
+         Depth=="3")
+
+p.c3.x <- p.c3$Concentration
+
+adf.test(x = p.c3.x, alternative = "stationary")
+## p < 0.01, stationary
+
+p.c4 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Pasteuria",
+         Depth=="4")
+
+p.c4.x <- p.c4$Concentration
+
+adf.test(x = p.c4.x, alternative = "stationary")
+## p = 0.60, nonstationary
+
+p.c5 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Pasteuria",
+         Depth=="5")
+
+p.c5.x <- p.c5$Concentration
+
+adf.test(x = p.c5.x, alternative = "stationary")
+## p = 0.02, stationary
+
+p.c6 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Pasteuria",
+         Depth=="6")
+
+p.c6.x <- p.c6$Concentration
+
+adf.test(x = p.c6.x, alternative = "stationary")
+## p = 0.96, nonstationary
+
+p.c7 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Pasteuria",
+         Depth=="7")
+
+p.c7.x <- p.c7$Concentration
+
+adf.test(x = p.c7.x, alternative = "stationary")
+## p = 0.64, nonstationary
+
+p.c0 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Pasteuria",
+         Depth=="0")
+
+p.c0.x <- p.c0$Concentration
+
+adf.test(x = p.c0.x, alternative = "stationary")
+## can't be tested, too few values
+
+############# Cedar Blastulidium #####################
+
+b.c1 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Blastulidium",
+         Depth=="1")
+
+b.c1.x <- b.c1$Concentration
+
+adf.test(x = b.c1.x, alternative = "stationary")
+## p = 0.26, nonstationary
+
+b.c2 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Blastulidium",
+         Depth=="2")
+
+b.c2.x <- b.c2$Concentration
+
+adf.test(x = b.c2.x, alternative = "stationary")
+## p = 0.48, nonstationary
+
+b.c3 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Blastulidium",
+         Depth=="3")
+
+b.c3.x <- b.c3$Concentration
+
+adf.test(x = b.c3.x, alternative = "stationary")
+## p = 0.71, nonstationary
+
+b.c4 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Blastulidium",
+         Depth=="4")
+
+b.c4.x <- b.c4$Concentration
+
+adf.test(x = b.c4.x, alternative = "stationary")
+## p = 0.21, nonstationary
+
+b.c5 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Blastulidium",
+         Depth=="5")
+
+b.c5.x <- b.c5$Concentration
+
+adf.test(x = b.c5.x, alternative = "stationary")
+## p = 0.57, nonstationary
+
+b.c6 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Blastulidium",
+         Depth=="6")
+
+b.c6.x <- b.c6$Concentration
+
+adf.test(x = b.c6.x, alternative = "stationary")
+## p = 0.93, nonstationary
+
+b.c7 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Blastulidium",
+         Depth=="7")
+
+b.c7.x <- b.c7$Concentration
+
+adf.test(x = b.c7.x, alternative = "stationary")
+## p = 0.88, nonstationary
+
+b.c0 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Blastulidium",
+         Depth=="0")
+
+b.c0.x <- b.c0$Concentration
+
+adf.test(x = b.c0.x, alternative = "stationary")
+## can't be tested, too few values
+
+
+###### Cedar Spirobacillus #####################
+
+s.c1 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Spirobacillus",
+         Depth=="1")
+
+s.c1.x <- s.c1$Concentration
+
+adf.test(x = s.c1.x, alternative = "stationary")
+## p < 0.01, stationary
+
+s.c2 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Spirobacillus",
+         Depth=="2")
+
+s.c2.x <- s.c2$Concentration
+
+adf.test(x = s.c2.x, alternative = "stationary")
+## p < 0.01, stationary
+
+s.c3 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Spirobacillus",
+         Depth=="3")
+
+s.c3.x <- s.c3$Concentration
+
+adf.test(x = s.c3.x, alternative = "stationary")
+## p < 0.01, stationary
+
+s.c4 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Spirobacillus",
+         Depth=="4")
+
+s.c4.x <- s.c4$Concentration
+
+adf.test(x = s.c4.x, alternative = "stationary")
+## p = 0.54, nonstationary
+
+s.c5 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Spirobacillus",
+         Depth=="5")
+
+s.c5.x <- s.c5$Concentration
+
+adf.test(x = s.c5.x, alternative = "stationary")
+## p = 0.08, nonstationary
+
+s.c6 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Spirobacillus",
+         Depth=="6")
+
+s.c6.x <- s.c6$Concentration
+
+adf.test(x = s.c6.x, alternative = "stationary")
+## p < 0.01, stationary
+
+s.c7 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Spirobacillus",
+         Depth=="7")
+
+s.c7.x <- s.c7$Concentration
+
+adf.test(x = s.c7.x, alternative = "stationary")
+## p = 0.74, stationary
+
+s.c0 = a %>%
+  filter(Lake== "Cedar",
+         Parasite=="Spirobacillus",
+         Depth=="0")
+
+s.c0.x <- s.c0$Concentration
+
+adf.test(x = s.c0.x, alternative = "stationary")
+## can't be tested, too few values
+
+
+############### CrookedW Metschnikowia ##########################
+
+metsch.cw1 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Metschnikowia",
+         Depth=="1")
+
+metsch.cw1.x <- metsch.cw1$Concentration
+
+adf.test(x = metsch.cw1.x, alternative = "stationary")
+## p = 0.55, nonstationary
+
+metsch.cw2 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Metschnikowia",
+         Depth=="2")
+
+metsch.cw2.x <- metsch.cw2$Concentration
+
+adf.test(x = metsch.cw2.x, alternative = "stationary")
+## p = 0.68, nonstationary
+
+metsch.cw3 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Metschnikowia",
+         Depth=="3")
+
+metsch.cw3.x <- metsch.cw3$Concentration
+
+adf.test(x = metsch.cw3.x, alternative = "stationary")
+## p = 0.53, nonstationary
+
+metsch.cw4 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Metschnikowia",
+         Depth=="4")
+
+metsch.cw4.x <- metsch.cw4$Concentration
+
+adf.test(x = metsch.cw4.x, alternative = "stationary")
+## p = 0.58, nonstationary
+
+metsch.cw5 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Metschnikowia",
+         Depth=="5")
+
+metsch.cw5.x <- metsch.cw5$Concentration
+
+adf.test(x = metsch.cw5.x, alternative = "stationary")
+## p = 0.4, nonstationary
+
+metsch.cw6 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Metschnikowia",
+         Depth=="6")
+
+metsch.cw6.x <- metsch.cw6$Concentration
+
+adf.test(x = metsch.cw6.x, alternative = "stationary")
+## p > 0.99, nonstationary
+
+metsch.cw0 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Metschnikowia",
+         Depth=="0")
+
+metsch.cw0.x <- metsch.cw0$Concentration
+
+adf.test(x = metsch.cw0.x, alternative = "stationary")
+## can't be tested, too few values
+
+######## CrookedW MicG #####################
+
+mg.cw1 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Ordospora",
+         Depth=="1")
+
+mg.cw1.x <- mg.cw1$Concentration
+
+adf.test(x = mg.cw1.x, alternative = "stationary")
+## p < 0.01, stationary
+
+mg.cw2 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Ordospora",
+         Depth=="2")
+
+mg.cw2.x <- mg.cw2$Concentration
+
+adf.test(x = mg.cw2.x, alternative = "stationary")
+## p < 0.01, stationary
+
+mg.cw3 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Ordospora",
+         Depth=="3")
+
+mg.cw3.x <- mg.cw3$Concentration
+
+adf.test(x = mg.cw3.x, alternative = "stationary")
+## p = 0.07, nonstationary
+
+mg.cw4 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Ordospora",
+         Depth=="4")
+
+mg.cw4.x <- mg.cw4$Concentration
+
+adf.test(x = mg.cw4.x, alternative = "stationary")
+## p = 0.02, stationary
+
+mg.cw5 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Ordospora",
+         Depth=="5")
+
+mg.cw5.x <- mg.cw5$Concentration
+
+adf.test(x = mg.cw5.x, alternative = "stationary")
+## p < 0.01, stationary
+
+mg.cw6 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Ordospora",
+         Depth=="6")
+
+mg.cw6.x <- mg.cw6$Concentration
+
+adf.test(x = mg.cw6.x, alternative = "stationary")
+## p = 0.87, nonstationary
+
+mg.cw0 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Ordospora",
+         Depth=="0")
+
+mg.cw0.x <- mg.cw0$Concentration
+
+adf.test(x = mg.cw0.x, alternative = "stationary")
+## can't be tested, too few values
+
+########## CrookedW Pasteuria #############################
+
+p.cw1 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Pasteuria",
+         Depth=="1")
+
+p.cw1.x <- p.cw1$Concentration
+
+adf.test(x = p.cw1.x, alternative = "stationary")
+## p < 0.01, stationary
+
+p.cw2 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Pasteuria",
+         Depth=="2")
+
+p.cw2.x <- p.cw2$Concentration
+
+adf.test(x = p.cw2.x, alternative = "stationary")
+## p = 0.78, nonstationary
+
+p.cw3 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Pasteuria",
+         Depth=="3")
+
+p.cw3.x <- p.cw3$Concentration
+
+adf.test(x = p.cw3.x, alternative = "stationary")
+## p = 0.7, nonstationary
+
+p.cw4 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Pasteuria",
+         Depth=="4")
+
+p.cw4.x <- p.cw4$Concentration
+
+adf.test(x = p.cw4.x, alternative = "stationary")
+## p = 0.01, stationary
+
+p.cw5 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Pasteuria",
+         Depth=="5")
+
+p.cw5.x <- p.cw5$Concentration
+
+adf.test(x = p.cw5.x, alternative = "stationary")
+## p = 0.25, nonstationary
+
+p.cw6 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Pasteuria",
+         Depth=="6")
+
+p.cw6.x <- p.cw6$Concentration
+
+adf.test(x = p.cw6.x, alternative = "stationary")
+## p < 0.01, stationary
+
+p.cw0 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Pasteuria",
+         Depth=="0")
+
+p.cw0.x <- p.cw0$Concentration
+
+adf.test(x = p.cw0.x, alternative = "stationary")
+## can't be tested, too few values
+
+############# CrookedW Blastulidium #####################
+
+b.cw1 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Blastulidium",
+         Depth=="1")
+
+b.cw1.x <- b.cw1$Concentration
+
+adf.test(x = b.cw1.x, alternative = "stationary")
+## p > 0.99, nonstationary
+
+b.cw2 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Blastulidium",
+         Depth=="2")
+
+b.cw2.x <- b.cw2$Concentration
+
+adf.test(x = b.cw2.x, alternative = "stationary")
+## p = 0.51, nonstationary
+
+b.cw3 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Blastulidium",
+         Depth=="3")
+
+b.cw3.x <- b.cw3$Concentration
+
+adf.test(x = b.cw3.x, alternative = "stationary")
+## p = 0.57, nonstationary
+
+b.cw4 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Blastulidium",
+         Depth=="4")
+
+b.cw4.x <- b.cw4$Concentration
+
+adf.test(x = b.cw4.x, alternative = "stationary")
+## p = 0.51, nonstationary
+
+b.cw5 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Blastulidium",
+         Depth=="5")
+
+b.cw5.x <- b.cw5$Concentration
+
+adf.test(x = b.cw5.x, alternative = "stationary")
+## p = 0.68, nonstationary
+
+b.cw6 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Blastulidium",
+         Depth=="6")
+
+b.cw6.x <- b.cw6$Concentration
+
+adf.test(x = b.cw6.x, alternative = "stationary")
+## p = 0.85, nonstationary
+
+b.cw0 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Blastulidium",
+         Depth=="0")
+
+b.cw0.x <- b.cw0$Concentration
+
+adf.test(x = b.cw0.x, alternative = "stationary")
+## can't be tested, too few values
+
+
+###### CrookedW Spirobacillus #####################
+
+s.cw1 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Spirobacillus",
+         Depth=="1")
+
+s.cw1.x <- s.cw1$Concentration
+
+adf.test(x = s.cw1.x, alternative = "stationary")
+## p < 0.01, stationary
+
+s.cw2 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Spirobacillus",
+         Depth=="2")
+
+s.cw2.x <- s.cw2$Concentration
+
+adf.test(x = s.cw2.x, alternative = "stationary")
+## p = 0.01, stationary
+
+s.cw3 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Spirobacillus",
+         Depth=="3")
+
+s.cw3.x <- s.cw3$Concentration
+
+adf.test(x = s.cw3.x, alternative = "stationary")
+## p < 0.01, stationary
+
+s.cw4 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Spirobacillus",
+         Depth=="4")
+
+s.cw4.x <- s.cw4$Concentration
+
+adf.test(x = s.cw4.x, alternative = "stationary")
+## p < 0.01, stationary
+
+s.cw5 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Spirobacillus",
+         Depth=="5")
+
+s.cw5.x <- s.cw5$Concentration
+
+adf.test(x = s.cw5.x, alternative = "stationary")
+## p < 0.01, stationary
+
+s.cw6 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Spirobacillus",
+         Depth=="6")
+
+s.cw6.x <- s.cw6$Concentration
+
+adf.test(x = s.cw6.x, alternative = "stationary")
+## p < 0.01, stationary
+
+s.cw0 = a %>%
+  filter(Lake== "CrookedW",
+         Parasite=="Spirobacillus",
+         Depth=="0")
+
+s.cw0.x <- s.cw0$Concentration
+
+adf.test(x = s.cw0.x, alternative = "stationary")
+## can't be tested, too few values
+
+############### LilAp Metschnikowia ##########################
+
+metsch.l1 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Metschnikowia",
+         Depth=="1")
+
+metsch.l1.x <- metsch.l1$Concentration
+
+adf.test(x = metsch.l1.x, alternative = "stationary")
+## p = 0.97, nonstationary
+
+metsch.l2 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Metschnikowia",
+         Depth=="2")
+
+metsch.l2.x <- metsch.l2$Concentration
+
+adf.test(x = metsch.l2.x, alternative = "stationary")
+## p = 0.92, nonstationary
+
+metsch.l3 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Metschnikowia",
+         Depth=="3")
+
+metsch.l3.x <- metsch.l3$Concentration
+
+adf.test(x = metsch.l3.x, alternative = "stationary")
+## p > 0.99, nonstationary
+
+metsch.l4 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Metschnikowia",
+         Depth=="4")
+
+metsch.l4.x <- metsch.l4$Concentration
+
+adf.test(x = metsch.l4.x, alternative = "stationary")
+## p = 0.88, nonstationary
+
+metsch.l5 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Metschnikowia",
+         Depth=="5")
+
+metsch.l5.x <- metsch.l5$Concentration
+
+adf.test(x = metsch.l5.x, alternative = "stationary")
+## p > 0.99, nonstationary
+
+metsch.l6 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Metschnikowia",
+         Depth=="6")
+
+metsch.l6.x <- metsch.l6$Concentration
+
+adf.test(x = metsch.l6.x, alternative = "stationary")
+## p = 0.98, nonstationary
+
+metsch.l0 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Metschnikowia",
+         Depth=="0")
+
+metsch.l0.x <- metsch.l0$Concentration
+
+adf.test(x = metsch.l0.x, alternative = "stationary")
+## can't be tested, too few values
+
+######## LilAp MicG #####################
+
+mg.l1 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Ordospora",
+         Depth=="1")
+
+mg.l1.x <- mg.l1$Concentration
+
+adf.test(x = mg.l1.x, alternative = "stationary")
+## p = 0.77, nonstationary
+
+mg.l2 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Ordospora",
+         Depth=="2")
+
+mg.l2.x <- mg.l2$Concentration
+
+adf.test(x = mg.l2.x, alternative = "stationary")
+## p = 0.013, stationary
+
+mg.l3 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Ordospora",
+         Depth=="3")
+
+mg.l3.x <- mg.l3$Concentration
+
+adf.test(x = mg.l3.x, alternative = "stationary")
+## p = 0.36, nonstationary
+
+mg.l4 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Ordospora",
+         Depth=="4")
+
+mg.l4.x <- mg.l4$Concentration
+
+adf.test(x = mg.l4.x, alternative = "stationary")
+## p = 0.03, stationary
+
+mg.l5 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Ordospora",
+         Depth=="5")
+
+mg.l5.x <- mg.l5$Concentration
+
+adf.test(x = mg.l5.x, alternative = "stationary")
+## p > 0.99, nonstationary
+
+mg.l6 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Ordospora",
+         Depth=="6")
+
+mg.l6.x <- mg.l6$Concentration
+
+adf.test(x = mg.l6.x, alternative = "stationary")
+## p = 0.19, nonstationary
+
+mg.l0 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Ordospora",
+         Depth=="0")
+
+mg.l0.x <- mg.l0$Concentration
+
+adf.test(x = mg.l0.x, alternative = "stationary")
+## can't be tested, too few values
+
+########## LilAp Pasteuria #############################
+
+p.l1 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Pasteuria",
+         Depth=="1")
+
+p.l1.x <- p.l1$Concentration
+
+adf.test(x = p.l1.x, alternative = "stationary")
+## p = 0.96, nonstationary
+
+p.l2 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Pasteuria",
+         Depth=="2")
+
+p.l2.x <- p.l2$Concentration
+
+adf.test(x = p.l2.x, alternative = "stationary")
+## p = 0.81, nonstationary
+
+p.l3 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Pasteuria",
+         Depth=="3")
+
+p.l3.x <- p.l3$Concentration
+
+adf.test(x = p.l3.x, alternative = "stationary")
+## p = 0.97, nonstationary
+
+p.l4 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Pasteuria",
+         Depth=="4")
+
+p.l4.x <- p.l4$Concentration
+
+adf.test(x = p.l4.x, alternative = "stationary")
+## p = 0.91, nonstationary
+
+p.l5 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Pasteuria",
+         Depth=="5")
+
+p.l5.x <- p.l5$Concentration
+
+adf.test(x = p.l5.x, alternative = "stationary")
+## p = 0.95, nonstationary
+
+p.l6 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Pasteuria",
+         Depth=="6")
+
+p.l6.x <- p.l6$Concentration
+
+adf.test(x = p.l6.x, alternative = "stationary")
+## p = 0.53, nonstationary
+
+p.l0 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Pasteuria",
+         Depth=="0")
+
+p.l0.x <- p.l0$Concentration
+
+adf.test(x = p.l0.x, alternative = "stationary")
+## can't be tested, too few values
+
+############# LilAp Blastulidium #####################
+
+b.l1 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Blastulidium",
+         Depth=="1")
+
+b.l1.x <- b.l1$Concentration
+
+adf.test(x = b.l1.x, alternative = "stationary")
+## p = 0.77, nonstationary
+
+b.l2 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Blastulidium",
+         Depth=="2")
+
+b.l2.x <- b.l2$Concentration
+
+adf.test(x = b.l2.x, alternative = "stationary")
+## p = 0.38, nonstationary
+
+b.l3 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Blastulidium",
+         Depth=="3")
+
+b.l3.x <- b.l3$Concentration
+
+adf.test(x = b.l3.x, alternative = "stationary")
+## p = 0.94, nonstationary
+
+b.l4 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Blastulidium",
+         Depth=="4")
+
+b.l4.x <- b.l4$Concentration
+
+adf.test(x = b.l4.x, alternative = "stationary")
+## p = 0.69, nonstationary
+
+b.l5 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Blastulidium",
+         Depth=="5")
+
+b.l5.x <- b.l5$Concentration
+
+adf.test(x = b.l5.x, alternative = "stationary")
+## NA
+
+b.l6 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Blastulidium",
+         Depth=="6")
+
+b.l6.x <- b.l6$Concentration
+
+adf.test(x = b.l6.x, alternative = "stationary")
+## p > 0.99, nonstationary
+
+b.l0 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Blastulidium",
+         Depth=="0")
+
+b.l0.x <- b.l0$Concentration
+
+adf.test(x = b.l0.x, alternative = "stationary")
+## can't be tested, too few values
+
+
+###### LilAp Spirobacillus #####################
+
+s.l1 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Spirobacillus",
+         Depth=="1")
+
+s.l1.x <- s.l1$Concentration
+
+adf.test(x = s.l1.x, alternative = "stationary")
+## p = 0.5, nonstationary
+
+s.l2 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Spirobacillus",
+         Depth=="2")
+
+s.l2.x <- s.l2$Concentration
+
+adf.test(x = s.l2.x, alternative = "stationary")
+## p = 0.94, nonstationary
+
+s.l3 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Spirobacillus",
+         Depth=="3")
+
+s.l3.x <- s.l3$Concentration
+
+adf.test(x = s.l3.x, alternative = "stationary")
+## p < 0.01, stationary
+
+s.l4 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Spirobacillus",
+         Depth=="4")
+
+s.l4.x <- s.l4$Concentration
+
+adf.test(x = s.l4.x, alternative = "stationary")
+## p = 0.91, nonstationary
+
+s.l5 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Spirobacillus",
+         Depth=="5")
+
+s.l5.x <- s.l5$Concentration
+
+adf.test(x = s.l5.x, alternative = "stationary")
+## p = 0.66, nonstationary
+
+s.l6 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Spirobacillus",
+         Depth=="6")
+
+s.l6.x <- s.l6$Concentration
+
+adf.test(x = s.l6.x, alternative = "stationary")
+## p = 0.97, nonstationary
+
+s.l0 = a %>%
+  filter(Lake== "LilAp",
+         Parasite=="Spirobacillus",
+         Depth=="0")
+
+s.l0.x <- s.l0$Concentration
+
+adf.test(x = s.l0.x, alternative = "stationary")
+## can't be tested, too few values
+
+```

@@ -1,0 +1,311 @@
+---
+title: "MixingDepthComboPlot"
+author: "Elizabeth Davenport"
+date: '2023-11-22'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Initial stuff, including loading packages and importing data
+
+##loading packages
+```{r,message=F,warning=F}
+library(here)
+library(rstatix)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(ggpubr)
+```
+## loading files
+
+```{r,message=F,warning=F}
+# Tell R where files are stored
+here::i_am("scripts/MixingDepthComboPlot.Rmd")
+
+# Load Files
+a <- readr::read_csv(here("data/MillMixingDepthCV.csv"))
+b <- readr::read_csv(here("data/BishopMixingDepthCV.csv"))
+c <- readr::read_csv(here("data/CedarMixingDepthCV.csv"))
+d <- readr::read_csv(here("data/CrookedWMixingDepthCV.csv"))
+e <- readr::read_csv(here("data/LilApMixingDepthCV.csv"))
+f <- readr::read_csv(here("data/WalshMixingDepthCV.csv"))
+
+```
+
+## Making the six-panel plot
+```{r,message=F,warning=F}
+
+Bishop <- na.omit(b)
+bmix <- as.factor(Bishop$MixingDepth)
+bcv <- Bishop$CV
+
+col2 <- c("1"= "#C6DBEF", "2"= "#9ECAE1", "3"="#6BAED6", "4"="#4292C6","5"= "#2171B5","6"= "#08519C","7"= "#08308B", "10"= "#08316C")
+
+CVbishop <- ggplot(data=Bishop,aes(x=as.factor(bmix),y=bcv, fill=as.factor(bmix))) +
+  geom_jitter(color="black", size=0.4, alpha=0.9) +
+  geom_boxplot(alpha=0.6)+
+  scale_y_continuous(limits = c(0,4.5), breaks = seq(0,4.5,.5))+
+  scale_x_discrete(breaks=seq(0,10,1))+
+  scale_fill_manual(name="Mixing Depth", values = col2)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle("Bishop (0.751)") +
+  labs(x = ("Mixing Depth (m)"), y=("Patchiness"))+
+  theme(plot.title = element_text(face = "bold",size = 14)) +
+  theme(axis.text=element_text(size=12, face = "bold"), 
+        axis.title=element_text(size=14,face="bold")) +
+  theme(legend.position = "bottom")
+
+
+##################
+Mill <- na.omit(a)
+mmix <- as.factor(Mill$MixingDepth)
+mcv <- Mill$CV
+
+CVmill <- ggplot(data=Mill,aes(x=as.factor(mmix),y=mcv, fill=as.factor(mmix))) +
+  geom_jitter(color="black", size=0.4, alpha=0.9) +
+  geom_boxplot(alpha=0.6)+
+  scale_y_continuous(limits = c(0,3.5), breaks = seq(0,3.5,.5))+
+  scale_x_discrete(breaks=seq(0,5,1))+
+  scale_fill_manual(name="Mixing Depth", values = col2)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle("Mill (0.821)") +
+  labs(x = ("Mixing Depth (m)"), y=("Patchiness"))+
+  theme(plot.title = element_text(face = "bold",size = 14)) +
+  theme(axis.text=element_text(size=12, face = "bold"), 
+        axis.title=element_text(size=14,face="bold")) +
+  theme(legend.position = "none")
+
+
+
+#################
+Cedar <- na.omit(c)
+cmix <- as.factor(Cedar$MixingDepth)
+ccv <- Cedar$CV
+
+CVcedar <- ggplot(data=Cedar,aes(x=as.factor(cmix),y=ccv, fill=as.factor(cmix))) +
+  geom_jitter(color="black", size=0.4, alpha=0.9) +
+  geom_boxplot(alpha=0.6)+
+  scale_y_continuous(limits = c(0,3.5), breaks = seq(0,3.5,.5))+
+  scale_x_discrete(breaks=seq(0,6,1))+
+  scale_fill_manual(name="Mixing Depth", values = col2)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle("Cedar (0.507)") +
+  labs(x = ("Mixing Depth (m)"), y=("Patchiness"))+
+  theme(plot.title = element_text(face = "bold",size = 14)) +
+  theme(axis.text=element_text(size=12, face = "bold"), 
+        axis.title=element_text(size=14,face="bold")) +
+  theme(legend.position = "none")
+
+
+
+##############
+
+CW <- na.omit(d)
+cwmix <- as.factor(CW$MixingDepth)
+cwcv <- CW$CV
+
+
+CVcw <- ggplot(data=CW,aes(x=as.factor(cwmix),y=cwcv, fill=as.factor(cwmix))) +
+  geom_jitter(color="black", size=0.4, alpha=0.9) +
+  geom_boxplot(alpha=0.6)+
+  scale_y_continuous(limits = c(0,3.5), breaks = seq(0,3.5,.5))+
+  scale_x_discrete(breaks=seq(0,6,1))+
+  scale_fill_manual(name="Mixing Depth", values = col2)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle("Crooked W (0.949)") +
+  labs(x = ("Mixing Depth (m)"), y=("Patchiness"))+
+  theme(plot.title = element_text(face = "bold",size = 14)) +
+  theme(axis.text=element_text(size=12, face = "bold"), 
+        axis.title=element_text(size=14,face="bold")) +
+  theme(legend.position = "none")
+
+
+
+#################
+
+LilAp <- na.omit(e)
+lmix <- as.factor(LilAp$MixingDepth)
+lcv <- LilAp$CV
+
+my_comparisons <- list(c("1", "5"))
+
+CVlilap <- ggplot(data=LilAp,aes(x=as.factor(lmix),y=lcv, fill=as.factor(lmix))) +
+  geom_jitter(color="black", size=0.4, alpha=0.9) +
+  geom_boxplot(alpha=0.6)+
+  scale_y_continuous(limits = c(0,3.5), breaks = seq(0,3.5,.5))+
+  scale_x_discrete(breaks=seq(0,5,1))+
+  scale_fill_manual(name="Mixing Depth", values = col2)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle("Little Appleton (0.181)") +
+  labs(x = ("Mixing Depth (m)"), y=("Patchiness"))+
+  theme(plot.title = element_text(face = "bold",size = 14)) +
+  theme(axis.text=element_text(size=12, face = "bold"), 
+        axis.title=element_text(size=14,face="bold")) +
+  theme(legend.position = "none")+  
+  stat_compare_means(method="wilcox.test", paired=FALSE, comparisons = my_comparisons, hide.ns=FALSE) # Add pairwise comparisons p-value
+
+
+
+
+################
+
+Walsh <- na.omit(f)
+wmix <- as.factor(Walsh$`Mixing Depth`)
+wcv <- Walsh$CV
+
+my_comparisons2 <- list(c("1", "5"))
+
+
+CVwalsh <- ggplot(data=Walsh,aes(x=as.factor(wmix),y=wcv, fill=as.factor(wmix))) +
+  geom_jitter(color="black", size=0.4, alpha=0.9) +
+  geom_boxplot(alpha=0.6)+
+  ##geom_violin() +
+  scale_y_continuous(limits = c(0,3.5), breaks = seq(0,3.5,.5))+
+  scale_x_discrete(breaks=seq(0,5,1))+
+  scale_fill_manual(name="Mixing Depth", values = col2)+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"))+
+  ggtitle("Walsh (0.296)") +
+  labs(x = ("Mixing Depth (m)"), y=("Patchiness"))+
+  theme(plot.title = element_text(face = "bold",size = 14)) +
+  theme(axis.text=element_text(size=12, face = "bold"), 
+        axis.title=element_text(size=14,face="bold")) +
+  theme(legend.position = "none")+  
+  stat_compare_means(method="wilcox.test", paired=FALSE, comparisons = my_comparisons2, hide.ns=FALSE) # Add pairwise comparisons p-value
+
+
+
+################
+combined = ggarrange(CVbishop, CVcedar,CVcw, CVlilap, CVmill, CVwalsh,
+                     nrow = 2, ncol = 3,
+                     common.legend = TRUE,
+                     legend = "bottom")
+
+#### saving combined plot
+ggsave(here("figures", "CombinedMixingDepthBoxplot.jpg"), combined, width = 10, height = 7, dpi = 300)
+
+```
+##Wilcoxon Tests
+```{r,message=F,warning=F}
+##Cedar
+cmix <- as.factor(Cedar$MixingDepth)
+cr <- as.factor(Cedar$Round)
+ccv <- Cedar$CV
+cp <- Cedar$Parasite
+
+## creating a data frame
+cdf1<- data.frame(cr,cp,cmix, ccv)
+
+## Wilcoxon Test
+ctest<-compare_means(ccv ~ cmix,  data = cdf1, method="wilcox.test", paired = FALSE)
+ctest
+##ns for all combinations
+```
+
+```{r,message=F,warning=F}
+
+##Mill
+mmix <- as.factor(Mill$MixingDepth)
+mr <- as.factor(Mill$Round)
+mcv <- Mill$CV
+mp <- Mill$Parasite
+
+## creating a data frame
+mdf1<- data.frame(mr,mp,mmix, mcv)
+
+## Wilcoxon Test
+mtest<-compare_means(mcv ~ mmix,  data = mdf1, method="wilcox.test", paired = FALSE)
+mtest
+```
+
+```{r,message=F,warning=F}
+
+##Crooked W
+cwmix <- as.factor(CW$MixingDepth)
+cwr <- as.factor(CW$Round)
+cwcv <- CW$CV
+cwp <- CW$Parasite
+
+## creating a data frame
+cwdf1<- data.frame(cwr,cwp,cwmix, cwcv)
+
+## Wilcoxon Test
+cwtest<-compare_means(cwcv ~ cwmix,  data = cwdf1, method="wilcox.test", paired = FALSE)
+cwtest
+##ns for all combinations
+```
+
+```{r,message=F,warning=F}
+
+##Bishop
+bmix <- as.factor(Bishop$MixingDepth)
+br <- as.factor(Bishop$Round)
+bcv <- Bishop$CV
+bp <- Bishop$Parasite
+
+## creating a data frame
+bdf1<- data.frame(br,bp,bmix, bcv)
+
+## Wilcoxon Test
+btest<-compare_means(bcv ~ bmix,  data = bdf1, method="wilcox.test", paired = FALSE)
+btest
+```
+
+```{r,message=F,warning=F}
+##Walsh
+wmix <- as.factor(Walsh$`Mixing Depth`)
+wr <- as.factor(Walsh$Round)
+wcv <- Walsh$CV
+wp <- Walsh$Parasite
+
+## creating a data frame
+wdf1<- data.frame(wr,wp,wmix, wcv)
+
+## Wilcoxon Test
+wtest<-compare_means(wcv ~ wmix,  data = wdf1, method="wilcox.test", paired = FALSE)
+wtest
+```
+
+```{r,message=F,warning=F}
+##LilAp
+lmix <- as.factor(LilAp$MixingDepth)
+lr <- as.factor(LilAp$Round)
+lcv <- LilAp$CV
+lp <- LilAp$Parasite
+
+## creating a data frame
+ldf1<- data.frame(lr,lp,lmix, lcv)
+
+## Wilcoxon Test
+ltest<-compare_means(lcv ~ lmix,  data = ldf1, method="wilcox.test", paired = FALSE)
+ltest
+```
+
+

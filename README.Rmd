@@ -1,0 +1,67 @@
+# Davenport et al. study on parasite environmental transmission stage distribution in lakes
+---
+
+The files include all the data and code used to create the figures in the Davenport et al. manuscript. Data collection was led by Elizabeth Davenport and supported by Marcin Dziuba, Logan Jacobson, Siobhan Calhoun, and Kira Monell. Figures were created by Elizabeth Davenport and Meghan Duffy of the University of Michigan. 
+
+## Description of the data and file structure
+
+There are three main folders in the zip file:
+1. scripts: this contains the code used to create figures.
+
+2. data: this contains the data collected during the study.
+
+3. figures: this is the folder where plots will be saved from the output of the R markdown files.
+
+## Sharing/Access information
+
+During the review process, data and code were posted at:
+https://github.com/davenportlibby/SporeDistribution
+
+# Spore Concentrations and Outbreak Data
+Data and code for 2021 field study led by Elizabeth Davenport
+
+Citation: Parasite transmission stage abundance varies in lakes over time and space
+
+Authors: Elizabeth S. Davenport 1*, Marcin K. Dziuba 1, Logan E. Jacobson 1, Siobhan K. Calhoun 1, Kira J. Monell 1, and Meghan A. Duffy 1
+        1 Department of Ecology & Evolutionary Biology, University of Michigan, Ann Arbor, MI 48109, USA
+
+Contact: * Author responsible for writing code related to analyses and figures: davenpe@umich.edu
+         
+Date: November 2023
+
+_______________________________________________________________________________________________________________
+
+DATA
+
+BishopMixingDepthCV.csv: this data file contains the coefficient of variation of the spore concentration vertically through the water column and the depth of mixing through the water column based on temperature data. Parasite = name of the parasite species quantified. Round = temporal sampling round. Lake = name of the lake sampled. CV = coefficient of variation. MixingDepth = the deepest meter that is being mixed.
+
+CedarMixingDepthCV.csv: this data file contains the coefficient of variation of the spore concentration vertically through the water column and the depth of mixing through the water column based on temperature data. Parasite = name of the parasite species quantified. Round = temporal sampling round. Lake = name of the lake sampled. CV = coefficient of variation. MixingDepth = the deepest meter that is being mixed.
+
+CrookedWMixingDepthCV.csv: this data file contains the coefficient of variation of the spore concentration vertically through the water column and the depth of mixing through the water column based on temperature data. Parasite = name of the parasite species quantified. Round = temporal sampling round. Lake = name of the lake sampled. CV = coefficient of variation. MixingDepth = the deepest meter that is being mixed.
+
+LilApMixingDepthCV.csv: this data file contains the coefficient of variation of the spore concentration vertically through the water column and the depth of mixing through the water column based on temperature data. Parasite = name of the parasite species quantified. Round = temporal sampling round. Lake = name of the lake sampled. CV = coefficient of variation. MixingDepth = the deepest meter that is being mixed.
+
+MillMixingDepthCV.csv: this data file contains the coefficient of variation of the spore concentration vertically through the water column and the depth of mixing through the water column based on temperature data. Parasite = name of the parasite species quantified. Round = temporal sampling round. Lake = name of the lake sampled. CV = coefficient of variation. MixingDepth = the deepest meter that is being mixed.
+
+WalshMixingDepthCV.csv: this data file contains the coefficient of variation of the spore concentration vertically through the water column and the depth of mixing through the water column based on temperature data. Parasite = name of the parasite species quantified. Round = temporal sampling round. Lake = name of the lake sampled. CV = coefficient of variation. Mixing Depth = the deepest meter that is being mixed.
+
+Cedar_Basin_Nearshore.csv: this data file contains the temperature data collected from thermistor chains deployed at the deep basin and at a nearshore location. Water temperature at 1-meter intervals was measured every 5 minutes. The temperature difference was calculated using the temperature data collected at the same depth at the deep basin and nearshore location. Date = datetime of temperature measurements. B1 = temperature recorded at 1 meter at the deep basin. B2 = temperature recorded at 2 meters at the deep basin. B3 = temperature recorded at 3 meters at the deep basin. B4 = temperature recorded at 4 meters at the deep basin. B5 = temperature recorded at 5 meters at the deep basin. Bsurf = temperature recorded at 0 meters at the deep basin. NS1 = temperature recorded at 1 meter nearshore. NS2 = temperature recorded at 2 meters nearshore. NS3 = temperature recorded at 3 meters nearshore. NS3 = temperature recorded at 3 meter2 nearshore. NSSurf = temperature recorded at 0 meters nearshore. Diff.1 = temperature difference between deep basin and nearshore at 1 meter. Diff.2 = temperature difference between deep basin and nearshore at 2 meters. Diff.3 = temperature difference between deep basin and nearshore at 3 meters.
+
+Walsh_Basin_Nearshore.csv: this data file contains the temperature data collected from thermistor chains deployed at the deep basin and at a nearshore location. Water temperature at 1-meter intervals was measured every 5 minutes. The temperature difference was calculated using the temperature data collected at the same depth at the deep basin and nearshore location. Date = datetime of temperature measurements. B1 = temperature recorded at 1 meter at the deep basin. B2 = temperature recorded at 2 meters at the deep basin. B3 = temperature recorded at 3 meters at the deep basin. B4 = temperature recorded at 4 meters at the deep basin. B5 = temperature recorded at 5 meters at the deep basin. Bsurf = temperature recorded at 0 meters at the deep basin. NS1 = temperature recorded at 1 meter nearshore. NS2 = temperature recorded at 2 meters nearshore. NS3 = temperature recorded at 3 meters nearshore. NS3 = temperature recorded at 3 meter2 nearshore. NSSurf = temperature recorded at 0 meters nearshore. Diff.1 = temperature difference between deep basin and nearshore at 1 meter. Diff.2 = temperature difference between deep basin and nearshore at 2 meters. Diff.3 = temperature difference between deep basin and nearshore at 3 meters.
+
+CV_Cedar_Locations.csv: this data file contains the coefficient of variation of the spore concentration vertically through the water column at multiple locations across the lake. Parasite = name of the parasite species quantified. Round = temporal sampling round. Lake = name of the lake sampled. CV = coefficient of variation. Locations = the location sampled within the lake (deep basin, intermediate location, nearshore location).
+
+CV_LilAp_Locations.csv: this data file contains the coefficient of variation of the spore concentration vertically through the water column at multiple locations across the lake. Parasite = name of the parasite species quantified. Round = temporal sampling round. Lake = name of the lake sampled. CV = coefficient of variation. Location = the location sampled within the lake (deep basin, intermediate location, nearshore location).
+
+CV_Walsh_Locations.csv: this data file contains the coefficient of variation of the spore concentration vertically through the water column at multiple locations across the lake. Parasite = name of the parasite species quantified. Round = temporal sampling round. Lake = name of the lake sampled. CV = coefficient of variation. Location = the location sampled within the lake (deep basin, intermediate location, nearshore location).
+
+CV_Depth_All_Parasites.csv: this data file contains the coefficient of variation of the spore concentration at specific depths through time. Lake = name of the lake sampled. Parasite = name of the parasite species quantified. Depth = meter of the water column sampled. CV = coefficient of variation of spore concentration measuring variation over time at a specific depth.
+
+SporeConcentrationsByDepthAll.csv: this data file contains the spore concentration for all five parasites at every meter of the water column at the deep basin of our six study lakes. Sample = unique sample ID. Round = sampling round number. Depth = meter of the water column sampled. Date = date of sampling. Lake = name of the lake sampled. Parasite = name of the parasite species quantified. Concentration = number of spores per liter. ConcentrationLog10Plus1 = log of the number of spores per liter plus one.
+
+SporeConcentrationsByDepthLocations.csv: this data file contains the spore concentration for all five parasites at every meter of the water column at all locations across our six study lakes. Sample = unique sample ID. Round = sampling round number. Depth = meter of the water column sampled. Date = date of sampling. Lake = name of the lake sampled. Location = specific location within the lake being sampled (deep basin, intermediate location, and nearshore location). Parasite = name of the parasite species quantified. Concentration = number of spores per liter. ConcentrationLog10Plus1 = log of the number of spores per liter plus one.
+
+Walsh_Basin_Thermal_Profile_2021.csv: this data file contains the temperature data collected from the thermistor chains deployed at the deep basin of Walsh Lake. Water temperature at 1-meter intervals was measured every 5 minutes. Date = datetime of temperature measurements. B1 = temperature recorded at 1 meter at the deep basin. B2 = temperature recorded at 2 meters at the deep basin. B3 = temperature recorded at 3 meters at the deep basin. B4 = temperature recorded at 4 meters at the deep basin. B5 = temperature recorded at 5 meters at the deep basin. Surface = temperature recorded at 0 meters at the deep basin.
+
+_______________________________________________________________________________________________________________
+
