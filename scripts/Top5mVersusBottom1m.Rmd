@@ -1,0 +1,702 @@
+---
+title: "Top5mVersusBottom1m"
+author: "Elizabeth Davenport"
+date: '2023-09-14'
+output: word_document
+---
+
+# Initial stuff, including loading packages and importing data
+
+##loading packages
+```{r,message=F,warning=F}
+library(here)
+library(rstatix)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+```
+## loading files
+
+```{r,message=F,warning=F}
+# Tell R where files are stored
+here::i_am("scripts/Top5mVersusBottom1m.Rmd")
+
+# Load Files
+a <- readr::read_csv(here("data/SporeConcentrationsByDepthAll.csv"))
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Walsh Ordospora 6 meters
+```{r,message=F,warning=F}
+
+wo6 = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="Walsh",
+         Depth =="6")
+wo6.spores <- wo6$Concentration
+
+wo = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="Walsh",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+wo.spores<- wo$Concentration
+
+walsh.ordo <- data.frame( 
+                group = c(rep("6",7), rep("other",66)),
+                spores = c(wo6.spores,  wo.spores)
+                )
+
+res.wo <- wilcox.test(wo6.spores, wo.spores)
+res.wo
+### significantly different, W = 371.5, p = 0.0083
+```
+
+### Walsh Metschnikowia 6 meters
+```{r,message=F,warning=F}
+
+wm6 = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="Walsh",
+         Depth =="6")
+wm6.spores <- wm6$Concentration
+
+wm = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="Walsh",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+wm.spores<- wm$Concentration
+
+walsh.metsch <- data.frame( 
+                group = c(rep("6",7), rep("other",66)),
+                spores = c(wm6.spores,  wm.spores)
+                )
+
+res.wm <- wilcox.test(wm6.spores, wm.spores)
+res.wm
+### significantly different, W = 413, p = 0.0005
+```
+
+
+
+### Walsh Blastulidium 6 meters
+```{r,message=F,warning=F}
+
+wb6 = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="Walsh",
+         Depth =="6")
+wb6.spores <- wb6$Concentration
+
+wb = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="Walsh",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+wb.spores<- wb$Concentration
+
+walsh.brood <- data.frame( 
+                group = c(rep("6",7), rep("other",66)),
+                spores = c(wb6.spores,  wb.spores)
+                )
+
+res.wb <- wilcox.test(wb6.spores, wb.spores)
+res.wb
+### not significantly different, W = 299.5, p = 0.20
+```
+
+### Walsh Pasteuria 6 meters
+```{r,message=F,warning=F}
+
+wp6 = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Walsh",
+         Depth =="6")
+wp6.spores <- wp6$Concentration
+
+wp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Walsh",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+wp.spores<- wp$Concentration
+
+walsh.past <- data.frame( 
+                group = c(rep("6",7), rep("other",66)),
+                spores = c(wp6.spores,  wp.spores)
+                )
+
+res.wp <- wilcox.test(wp6.spores, wp.spores)
+res.wp
+### significantly different, W = 393.5, p = 0.0015
+```
+
+## Walsh Spirobacillus 6 meters
+```{r,message=F,warning=F}
+
+ws6 = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="Walsh",
+         Depth =="6")
+ws6.spores <- ws6$Concentration
+
+ws = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="Walsh",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+ws.spores<- ws$Concentration
+
+walsh.spiro <- data.frame( 
+                group = c(rep("6",7), rep("other",66)),
+                spores = c(ws6.spores,  ws.spores)
+                )
+
+res.ws <- wilcox.test(ws6.spores, ws.spores)
+res.ws
+### not significantly different, W = 326, p = 0.07
+```
+
+### Mill Ordospora 6 meters
+```{r,message=F,warning=F}
+
+mo6 = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="Mill",
+         Depth =="6")
+mo6.spores <- mo6$Concentration
+
+mo = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="Mill",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+mo.spores<- mo$Concentration
+
+mill.ordo <- data.frame( 
+                group = c(rep("6",6), rep("other",65)),
+                spores = c(mo6.spores,  mo.spores)
+                )
+
+res.mo <- wilcox.test(mo6.spores, mo.spores)
+res.mo
+### not significantly different, W = 218.5, p = 0.63
+```
+
+### Mill Metschnikowia 6 meters
+```{r,message=F,warning=F}
+
+mm6 = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="Mill",
+         Depth =="6")
+mm6.spores <- mm6$Concentration
+
+mm = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="Mill",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+mm.spores<- mm$Concentration
+
+mill.metsch <- data.frame( 
+                group = c(rep("6",6), rep("other",65)),
+                spores = c(mm6.spores,  mm.spores)
+                )
+
+res.mm <- wilcox.test(mm6.spores, mm.spores)
+res.mm
+### not significantly different, W = 228, p = 0.457
+```
+
+### Mill Blastulidium 6 meters
+```{r,message=F,warning=F}
+
+mb6 = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="Mill",
+         Depth =="6")
+mb6.spores <- mb6$Concentration
+
+mb = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="Mill",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+mb.spores<- mb$Concentration
+
+res.mb <- wilcox.test(mb6.spores, mb.spores)
+res.mb
+### significantly different, W = 300.5, p = 0.027
+```
+
+### Mill Pasteuria 6 meters
+```{r,message=F,warning=F}
+
+mp6 = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Mill",
+         Depth =="6")
+mp6.spores <- mp6$Concentration
+
+mp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Mill",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+mp.spores<- mp$Concentration
+
+res.mp <- wilcox.test(mp6.spores, mp.spores)
+res.mp
+### significantly different, W = 273, p = 0.027
+```
+
+## Mill Spirobacillus 6 meters
+```{r,message=F,warning=F}
+
+ms6 = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="Mill",
+         Depth =="6")
+ms6.spores <- ms6$Concentration
+
+ms = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="Mill",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+ms.spores<- ms$Concentration
+
+res.ms <- wilcox.test(ms6.spores, ms.spores)
+res.ms
+### not significantly different, W = 326, p = 0.4
+```
+
+### Cedar Ordospora top 5 meters v. 1 meter
+```{r,message=F,warning=F}
+
+co6 = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="Cedar",
+         Depth =="7")
+co6.spores <- co6$Concentration
+
+co = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="Cedar",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+co.spores<- co$Concentration
+
+res.co <- wilcox.test(co6.spores, co.spores)
+res.co
+### not significantly different, W = 461, p = 0.13
+```
+
+### Cedar Metschnikowia top 5 meters v. 1 meter
+```{r,message=F,warning=F}
+
+cm6 = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="Cedar",
+         Depth =="7")
+cm6.spores <- cm6$Concentration
+
+cm = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="Cedar",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+cm.spores<- cm$Concentration
+
+res.cm <- wilcox.test(cm6.spores, cm.spores)
+res.cm
+### not significantly different, W = 434, p = 0.16
+```
+
+### Cedar Blastulidium top 5 meters v. 1 meter
+```{r,message=F,warning=F}
+
+cb6 = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="Cedar",
+         Depth =="7")
+cb6.spores <- cb6$Concentration
+
+cb = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="Cedar",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+cb.spores<- cb$Concentration
+
+res.cb <- wilcox.test(cb6.spores, cb.spores)
+res.cb
+### not significantly different, W = 415, p = 0.4
+```
+
+### Cedar Pasteuria top 5 meters v. 1 meter
+```{r,message=F,warning=F}
+
+cp6 = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Cedar",
+         Depth =="7")
+cp6.spores <- cp6$Concentration
+
+cp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Cedar",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+cp.spores<- cp$Concentration
+
+res.cp <- wilcox.test(cp6.spores, cp.spores)
+res.cp
+### significantly different, W = 563, p = 0.0003
+```
+
+## Cedar Spirobacillus top 5 meters v. 1 meter
+```{r,message=F,warning=F}
+
+cs6 = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="Cedar",
+         Depth =="7")
+cs6.spores <- cs6$Concentration
+
+cs = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="Cedar",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+cs.spores<- cs$Concentration
+
+res.cs <- wilcox.test(cs6.spores, cs.spores)
+res.cs
+### not significantly different, W = 477, p = 0.07
+```
+
+### Crooked W Ordospora 6 meters
+```{r,message=F,warning=F}
+
+cwo6 = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="CrookedW",
+         Depth =="6")
+cwo6.spores <- cwo6$Concentration
+
+cwo = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="CrookedW",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+cwo.spores<- cwo$Concentration
+
+res.cwo <- wilcox.test(cwo6.spores, cwo.spores)
+res.cwo
+### significantly different, W = 537, p = 0.007
+```
+
+### Crooked W Metschnikowia 6 meters
+```{r,message=F,warning=F}
+
+cwm6 = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="CrookedW",
+         Depth =="6")
+cwm6.spores <- cwm6$Concentration
+
+cwm = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="CrookedW",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+cwm.spores<- cwm$Concentration
+
+res.cwm <- wilcox.test(cwm6.spores, cwm.spores)
+res.cwm
+### not significantly different, W = 288.5, p = 0.28
+```
+
+### Crooked W Blastulidium 6 meters
+```{r,message=F,warning=F}
+
+cwb6 = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="CrookedW",
+         Depth =="6")
+cwb6.spores <- cwb6$Concentration
+
+cwb = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="CrookedW",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+cwb.spores<- cwb$Concentration
+
+res.cwb <- wilcox.test(cwb6.spores, cwb.spores)
+res.cwb
+### significantly different, W = 559, p = 0.0009
+```
+
+### Crooked W Pasteuria 6 meters
+```{r,message=F,warning=F}
+
+cwp6 = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="CrookedW",
+         Depth =="6")
+cwp6.spores <- cwp6$Concentration
+
+cwp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="CrookedW",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+cwp.spores<- cwp$Concentration
+
+res.cwp <- wilcox.test(cwp6.spores, cwp.spores)
+res.cwp
+### significantly different, W = 477.5, p = 0.04
+```
+
+## Crooked W Spirobacillus 6 meters
+```{r,message=F,warning=F}
+
+cws6 = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="CrookedW",
+         Depth =="6")
+cws6.spores <- cws6$Concentration
+
+cws = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="CrookedW",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+cws.spores<- cws$Concentration
+
+res.cws <- wilcox.test(cws6.spores, cws.spores)
+res.cws
+### not significantly different, W = 466, p = 0.11
+```
+
+### LilAp Ordospora 6 meters
+```{r,message=F,warning=F}
+
+lo6 = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="LilAp",
+         Depth =="6")
+lo6.spores <- lo6$Concentration
+
+lo = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="LilAp",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+lo.spores<- lo$Concentration
+
+res.lo <- wilcox.test(lo6.spores, lo.spores)
+res.lo
+### not significantly different, W = 394, p = 0.95
+```
+
+### LilAp Metschnikowia 6 meters
+```{r,message=F,warning=F}
+
+lm6 = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="LilAp",
+         Depth =="6")
+lm6.spores <- lm6$Concentration
+
+lm = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="LilAp",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+lm.spores<- lm$Concentration
+
+res.lm <- wilcox.test(lm6.spores, lm.spores)
+res.lm
+### not significantly different, W = 379.5, p = 0.88
+```
+
+
+### LilAp Blastulidium 6 meters
+```{r,message=F,warning=F}
+
+lb6 = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="LilAp",
+         Depth =="6")
+lb6.spores <- lb6$Concentration
+
+lb = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="LilAp",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+lb.spores<- lb$Concentration
+
+res.lb <- wilcox.test(lb6.spores, lb.spores)
+res.lb
+### not significantly different, W = 349, p = 0.47
+```
+
+### LilAp Pasteuria 6 meters
+```{r,message=F,warning=F}
+
+lp6 = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="LilAp",
+         Depth =="6")
+lp6.spores <- lp6$Concentration
+
+lp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="LilAp",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+lp.spores<- lp$Concentration
+
+res.lp <- wilcox.test(lp6.spores, lp.spores)
+res.lp
+### not significantly different, W = 471, p = 0.22
+```
+
+## LilAp Spirobacillus 6 meters
+```{r,message=F,warning=F}
+
+ls6 = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="LilAp",
+         Depth =="6")
+ls6.spores <- ls6$Concentration
+
+ls = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="LilAp",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5") 
+
+ls.spores<- ls$Concentration
+
+res.ls <- wilcox.test(ls6.spores, ls.spores)
+res.ls
+### significantly different, W = 637.5, p = 0.0005
+```
+
+### Bishop Ordospora top 5 v bottom 1 meter
+```{r,message=F,warning=F}
+
+bot = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="Bishop",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+bot.spores <- bot$Concentration
+
+bob = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="Bishop",
+         Depth == "16") 
+
+bob.spores<- bob$Concentration
+
+res.bo <- wilcox.test(bot.spores, bob.spores)
+res.bo
+### not significantly different, W = 434.5, p = .0848
+```
+
+### Bishop Blastulidium top 5 v bottom 1 meter
+```{r,message=F,warning=F}
+
+bbt = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="Bishop",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+bbt.spores <- bbt$Concentration
+
+bbb = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="Bishop",
+         Depth == "16") 
+
+bbb.spores<- bbb$Concentration
+
+res.bb <- wilcox.test(bbt.spores, bbb.spores)
+res.bb
+### not significantly different, W = 404, p = 0.0591
+```
+
+
+### Bishop Metschnikowia top 5 v bottom 1 meter
+```{r,message=F,warning=F}
+
+bmt = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="Bishop",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+bmt.spores <- bmt$Concentration
+
+bmb = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="Bishop",
+         Depth == "16") 
+
+bmb.spores<- bmb$Concentration
+
+res.bm <- wilcox.test(bmt.spores, bmb.spores)
+res.bm
+### not significantly different, W = 229, p = 0.0551
+```
+
+
+### Bishop Pasteuria top 5 v bottom 1 meter
+```{r,message=F,warning=F}
+
+bpt = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Bishop",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+bpt.spores <- bpt$Concentration
+
+bpb = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Bishop",
+         Depth == "16") 
+
+bpb.spores<- bpb$Concentration
+
+res.bp <- wilcox.test(bpt.spores, bpb.spores)
+res.bp
+### not significantly different, W = 342.5, p = 0.781
+```
+
+
+### Bishop Spirobacillus top 5 v bottom 1 meter
+```{r,message=F,warning=F}
+
+bst = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="Bishop",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+bst.spores <- bst$Concentration
+
+bsb = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="Bishop",
+         Depth == "16") 
+
+bsb.spores<- bsb$Concentration
+
+res.bs <- wilcox.test(bst.spores, bsb.spores)
+res.bs
+###  significantly different, W = 110, p = 0.0008
+```
+

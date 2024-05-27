@@ -1,0 +1,233 @@
+---
+title: "MixingDepthRegression"
+author: "Elizabeth Davenport"
+date: '2024-05-21'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Initial stuff, including loading packages and importing data
+
+##loading packages
+```{r,message=F,warning=F}
+library(here)
+library(rstatix)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(ggpubr)
+```
+## loading files
+
+```{r,message=F,warning=F}
+# Tell R where files are stored
+here::i_am("scripts/MixingDepthRegression.Rmd")
+
+# Load Files
+a <- readr::read_csv(here("data/MillMixingDepthCV.csv"))
+b <- readr::read_csv(here("data/BishopMixingDepthCV.csv"))
+c <- readr::read_csv(here("data/CedarMixingDepthCV.csv"))
+d <- readr::read_csv(here("data/CrookedWMixingDepthCV.csv"))
+e <- readr::read_csv(here("data/LilApMixingDepthCV.csv"))
+f <- readr::read_csv(here("data/WalshMixingDepthCV.csv"))
+
+```
+
+```{r,message=F,warning=F}
+mill.mix <- a$MixingDepth
+mill.cv <- a$CV
+
+mill.CV.plot <- ggplot(a, aes(x=mill.mix, y=mill.cv, group=1)) +
+  geom_point(size=1) +
+  ggtitle("Mill (0.821)") +
+  scale_y_continuous(limits = c(0,3), breaks = seq(0,3,1))+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"),
+        plot.title = element_text(face = "bold", size = 10),
+        axis.text=element_text(size=8), 
+        axis.title=element_text(face = "bold", size=8))+
+  labs(x = ("Mixing Depth (m)"), y = "")+
+  stat_smooth(method = "lm", formula = y ~ x, geom = "smooth", linetype="dashed")
+
+mill.CV.plot
+```
+
+```{r,message=F,warning=F}
+mill.model <- lm(mill.cv ~ mill.mix, data = a)
+
+summary(mill.model)
+
+```
+
+```{r,message=F,warning=F}
+bishop.mix <- b$MixingDepth
+bishop.cv <- b$CV
+
+bishop.CV.plot <- ggplot(b, aes(x=bishop.mix, y=bishop.cv, group=1)) +
+  geom_point(size=1) +
+  scale_x_continuous(limits = c(1,10), breaks = seq(1,10,1))+
+  scale_y_continuous(limits = c(0,4.5), breaks = seq(0,4,1))+
+  ggtitle("Bishop (0.751)") +
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"),
+        plot.title = element_text(face = "bold", size = 10),
+        axis.text=element_text(size=8), 
+        axis.title=element_text(face = "bold", size=8))+
+  labs(x = ("Mixing Depth (m)"), y = "Patchiness")+
+  stat_smooth(method = "lm", formula = y ~ x, geom = "smooth", linetype="dashed")
+
+bishop.CV.plot
+```
+
+```{r,message=F,warning=F}
+bishop.model <- lm(bishop.cv ~ bishop.mix, data = b)
+
+summary(bishop.model)
+
+```
+
+
+
+```{r,message=F,warning=F}
+cedar.mix <- c$MixingDepth
+cedar.cv <- c$CV
+
+cedar.CV.plot <- ggplot(c, aes(x=cedar.mix, y=cedar.cv, group=1)) +
+  geom_point(size=1) +
+  ggtitle("Cedar (0.507)") +
+  scale_x_continuous(limits = c(1,6), breaks = seq(1,6,1))+
+  scale_y_continuous(limits = c(0,3), breaks = seq(0,3,1))+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"),
+        plot.title = element_text(face = "bold", size = 10),
+        axis.text=element_text(size=8), 
+        axis.title=element_text(face = "bold", size=8))+
+  labs(x = ("Mixing Depth (m)"), y = "")+
+  stat_smooth(method = "lm", formula = y ~ x, geom = "smooth", linetype="dashed")
+
+cedar.CV.plot
+```
+```{r,message=F,warning=F}
+cedar.model <- lm(cedar.cv ~ cedar.mix, data = c)
+
+summary(cedar.model)
+
+```
+
+
+
+```{r,message=F,warning=F}
+cw.mix <- d$MixingDepth
+cw.cv <- d$CV
+
+cw.CV.plot <- ggplot(d, aes(x=cw.mix, y=cw.cv, group=1)) +
+  geom_point(size=1) +
+  ggtitle("Crooked W (0.949)") +
+  scale_x_continuous(limits = c(1,5), breaks = seq(1,5,1))+
+  scale_y_continuous(limits = c(0,3), breaks = seq(0,3,1))+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"),
+        plot.title = element_text(face = "bold", size = 10),
+        axis.text=element_text(size=8), 
+        axis.title=element_text(face = "bold", size=8))+
+  labs(x = ("Mixing Depth (m)"), y = "")+
+  stat_smooth(method = "lm", formula = y ~ x, geom = "smooth", linetype="dashed")
+
+cw.CV.plot
+```
+
+```{r,message=F,warning=F}
+cw.model <- lm(cw.cv ~ cw.mix, data = d)
+
+summary(cw.model)
+
+```
+
+
+
+```{r,message=F,warning=F}
+LilAp.mix <- e$MixingDepth
+LilAp.cv <- e$CV
+
+LilAp.CV.plot <- ggplot(e, aes(x=LilAp.mix, y=LilAp.cv, group=1)) +
+  geom_point(size=1) +
+  ggtitle("Little Appleton (0.181)") +
+  scale_y_continuous(limits = c(0,3), breaks = seq(0,3,1))+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"),
+        plot.title = element_text(face = "bold", size = 10),
+        axis.text=element_text(size=8), 
+        axis.title=element_text(face = "bold", size=8))+
+  labs(x = ("Mixing Depth (m)"), y = "Patchiness")+
+  stat_smooth(method = "lm", formula = y ~ x, geom = "smooth")
+
+LilAp.CV.plot
+```
+
+```{r,message=F,warning=F}
+lilap.model <- lm(LilAp.cv ~ LilAp.mix, data = e)
+
+summary(lilap.model)
+
+```
+
+
+```{r,message=F,warning=F}
+walsh.mix <- f$`Mixing Depth`
+walsh.cv <- f$CV
+
+walsh.CV.plot <- ggplot(f, aes(x=walsh.mix, y=walsh.cv, group=1)) +
+  geom_point(size=1) +
+  ggtitle("Walsh (0.296)") +
+  scale_y_continuous(limits = c(0,3), breaks = seq(0,3,1))+
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"),
+        plot.title = element_text(face = "bold", size = 10),
+        axis.text=element_text(size=8), 
+        axis.title=element_text(face = "bold", size=8))+
+  labs(x = ("Mixing Depth (m)"), y = "")+
+  stat_smooth(method = "lm", formula = y ~ x, geom = "smooth")
+
+walsh.CV.plot
+```
+
+```{r,message=F,warning=F}
+walsh.model <- lm(walsh.cv ~ walsh.mix, data = f)
+
+summary(walsh.model)
+
+```
+
+
+```{r,message=F,warning=F}
+################
+combined = ggarrange(bishop.CV.plot,cedar.CV.plot, cw.CV.plot, LilAp.CV.plot, mill.CV.plot, walsh.CV.plot,
+                     nrow = 2, ncol = 3)
+
+#### saving combined plot
+ggsave(here("figures", "CombinedMixingDepthRegression.jpg"), combined, width = 8, height = 6, dpi = 600)
+
+```
+
+

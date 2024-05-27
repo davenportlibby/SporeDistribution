@@ -1,0 +1,278 @@
+---
+title: "SignificantDifferencesComparingSixMeters"
+author: "Elizabeth Davenport"
+date: '2023-11-20'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Initial stuff, including loading packages and importing data
+
+##loading packages
+```{r,message=F,warning=F}
+library(here)
+library(tidyverse)
+library(dplyr)
+library(lubridate)
+library(scales)
+library(ggpubr)
+library(reshape2)
+library(rstatix)
+```
+## loading files
+
+```{r,message=F,warning=F}
+# Tell R where files are stored
+here::i_am("scripts/SignificantDifferencesComparingSixMeters.Rmd")
+
+# Load Files
+a <- readr::read_csv(here("data/SporeConcentrationsByDepthAll.csv"))
+```
+
+##Walsh Ordospora
+```{r,message=F,warning=F}
+wo = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="Walsh",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+
+wo.mean <- mean(wo$Concentration)
+
+wo6 = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="Walsh",
+         Depth =="6")
+
+wo6.mean <- mean(wo6$Concentration)
+
+###percent increase
+wo.diff <- (((wo6.mean-wo.mean)/wo.mean)*100)
+wo.diff
+```
+
+
+##Walsh Metschnikowia
+```{r,message=F,warning=F}
+wm = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="Walsh",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+
+wm.mean <- mean(wm$Concentration)
+
+wm6 = a %>%
+  filter(Parasite== "Metschnikowia",
+         Lake=="Walsh",
+         Depth =="6")
+
+wm6.mean <- mean(wm6$Concentration)
+
+###percent increase
+wm.diff <- (((wm6.mean-wm.mean)/wm.mean)*100)
+wm.diff
+```
+
+
+##Walsh Pasteuria
+```{r,message=F,warning=F}
+wp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Walsh",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+
+wp.mean <- mean(wp$Concentration)
+
+wp6 = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Walsh",
+         Depth =="6")
+
+wp6.mean <- mean(wp6$Concentration)
+
+###percent increase
+wp.diff <- (((wp6.mean-wp.mean)/wp.mean)*100)
+wp.diff
+```
+
+
+##Cedar Pasteuria
+```{r,message=F,warning=F}
+cp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Cedar",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+
+cp.mean <- mean(cp$Concentration)
+
+cp7 = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Cedar",
+         Depth =="7")
+
+cp7.mean <- mean(cp7$Concentration)
+
+###percent increase
+cp.diff <- (((cp7.mean-cp.mean)/cp.mean)*100)
+cp.diff
+```
+
+##Mill Pasteuria
+```{r,message=F,warning=F}
+mp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Mill",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+
+mp.mean <- mean(mp$Concentration)
+
+mp6 = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="Mill",
+         Depth =="6")
+
+mp6.mean <- mean(mp6$Concentration)
+
+###percent increase
+mp.diff <- (((mp6.mean-mp.mean)/mp.mean)*100)
+mp.diff
+```
+
+
+##Mill Blastulidium
+```{r,message=F,warning=F}
+mb = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="Mill",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+
+mb.mean <- mean(mb$Concentration)
+
+mb6 = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="Mill",
+         Depth =="6")
+
+mb6.mean <- mean(mb6$Concentration)
+
+###percent increase
+mb.diff <- (((mb6.mean-mb.mean)/mb.mean)*100)
+mb.diff
+```
+
+
+##LilAp Spirobacillus
+```{r,message=F,warning=F}
+ls = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="LilAp",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+
+ls.mean <- mean(ls$Concentration)
+
+ls6 = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="LilAp",
+         Depth =="6")
+
+ls6.mean <- mean(ls6$Concentration)
+
+###percent increase
+ls.diff <- (((ls6.mean-ls.mean)/ls.mean)*100)
+ls.diff
+```
+
+
+##Crooked W Blastulidium
+```{r,message=F,warning=F}
+cwb = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="CrookedW",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+
+cwb.mean <- mean(cwb$Concentration)
+
+cwb6 = a %>%
+  filter(Parasite== "Blastulidium",
+         Lake=="CrookedW",
+         Depth =="6")
+
+cwb6.mean <- mean(cwb6$Concentration)
+
+###percent increase
+cwb.diff <- (((cwb6.mean-cwb.mean)/cwb.mean)*100)
+cwb.diff
+```
+
+
+##Crooked W Ordospora
+```{r,message=F,warning=F}
+cwo = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="CrookedW",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+
+cwo.mean <- mean(cwo$Concentration)
+
+cwo6 = a %>%
+  filter(Parasite== "Ordospora",
+         Lake=="CrookedW",
+         Depth =="6")
+
+cwo6.mean <- mean(cwo6$Concentration)
+
+###percent increase
+cwo.diff <- (((cwo6.mean-cwo.mean)/cwo.mean)*100)
+cwo.diff
+```
+
+##Crooked W Pasteuria
+```{r,message=F,warning=F}
+cwp = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="CrookedW",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+
+cwp.mean <- mean(cwp$Concentration)
+
+cwp6 = a %>%
+  filter(Parasite== "Pasteuria",
+         Lake=="CrookedW",
+         Depth =="6")
+
+cwp6.mean <- mean(cwp6$Concentration)
+
+###percent increase
+cwp.diff <- (((cwp6.mean-cwp.mean)/cwp.mean)*100)
+cwp.diff
+```
+
+
+
+##Bishop Spirobacillus
+```{r,message=F,warning=F}
+bs = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="Bishop",
+         Depth =="0" | Depth == "1" | Depth =="2"| Depth == "3"|Depth == "4"|Depth == "5")
+
+bs.mean <- mean(bs$Concentration)
+
+bs6 = a %>%
+  filter(Parasite== "Spirobacillus",
+         Lake=="Bishop",
+         Depth =="16")
+
+bs6.mean <- mean(bs6$Concentration)
+
+###percent increase
+bs.diff <- (((bs6.mean-bs.mean)/bs.mean)*100)
+bs.diff
+```
+
+
+
+
+

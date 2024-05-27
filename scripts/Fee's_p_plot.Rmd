@@ -1,0 +1,74 @@
+---
+title: "Fee's p"
+author: "Elizabeth Davenport"
+date: '2024-04-28'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Initial stuff, including loading packages and importing data
+
+##loading packages
+```{r,message=F,warning=F}
+library(tidyverse)
+library(here)
+library(ggpubr)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+library(scales)
+library(reshape2)
+```
+
+## loading files
+
+```{r,message=F,warning=F}
+# Tell R where files are stored
+here::i_am("scripts/Fee's_p_plot.Rmd")
+
+# Load Files
+a <- readr::read_csv(here("data/FeeP.csv"))
+
+```
+
+```{r,message=F,warning=F}
+##Format date
+date <- a$Date
+strptime(date, format = "%m/%d/%y")
+l <- as.POSIXct(date,format="%m/%d/%y",tz=Sys.timezone())
+
+Fee <- a$FeeP
+lake <- a$Lake
+color.lake <- c("CrookedW"="#D55E00",
+           "Bishop"= "#0072B2",
+           "Mill"= "#CC79A7",  
+           "Little Appleton"="#009E73",
+           "Walsh"="yellow3",
+           "Cedar"="#E69F00")
+
+FeeP <- ggplot(a, aes(x=l,y=Fee, group=lake, color=lake)) +
+  geom_point(size=2) +
+  geom_line(size=1)+
+  scale_colour_manual(values = color.lake)+
+  labs(x = "Date", y = "Fee's p", color = "Lake") +
+  theme_bw() +
+  theme(panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.line = element_line(colour = "black"),
+        axis.text=element_text(size=8, face = "bold"), 
+        axis.title=element_text(size=10,face="bold"),
+        legend.title = element_text(face = "bold",size = 10),
+        legend.text=element_text(size=8,face="bold"),
+        legend.position = "bottom")
+
+FeeP
+```
+
+
+```{r,message=F,warning=F}
+ggsave(here("figures", "Fee's_p_Plot.jpg"), FeeP, width = 8, height = 5, dpi = 600)
+```
+
